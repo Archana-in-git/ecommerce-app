@@ -1,28 +1,31 @@
 import mongoose from "mongoose";
 
 const variantSchema = new mongoose.Schema({
-  storage: { type: String, required: true }, // e.g. "128GB", "256GB"
-  price: { type: Number, required: true }, // price corresponding to that storage
-  colorOptions: [{ type: String }], // array of colors available for this variant
+  storage: { type: String, required: true },
+  price: { type: Number, required: true },
+  colorOptions: [{ type: String }],
 });
 
 const productSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    brand: { type: String, required: true }, // brand is important, make required
-    display: { type: String },
-    processor: { type: String },
-    battery: { type: String },
-    camera: { type: String },
-    os: { type: String },
-    sim: { type: String },
-    material: { type: String },
-    weight: { type: String },
-    imageUrl: { type: String },
-    variants: [variantSchema], // list of storage+price+color combos
+    brand: String,
+    display: String,
+    processor: String,
+    battery: String,
+    camera: String,
+    os: String,
+    sim: String,
+    material: String,
+    weight: String,
+    imageUrls: {
+      type: [String],
+      required: false,
+    },
+    variants: [variantSchema],
   },
   {
-    timestamps: true, // optional, adds createdAt and updatedAt
+    timestamps: true,
   }
 );
 
