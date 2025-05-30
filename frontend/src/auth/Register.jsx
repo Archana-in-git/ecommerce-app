@@ -130,7 +130,7 @@ const Register = () => {
       onClick={() => {
       }}
     >
-      Back to Login
+    i'm already a member
     </Button></Link>
   </Box>
 );
