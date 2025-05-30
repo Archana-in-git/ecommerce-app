@@ -1,19 +1,36 @@
 import React from "react";
-import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import Slider from "react-slick";
+import { Card, CardContent, Typography } from "@mui/material";
 
 const ProductCard = ({ product }) => {
-  console.log("Rendering ProductCard for:", product);
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false,
+  };
+
   return (
     <Card sx={{ maxWidth: 345, borderRadius: 4 }}>
-      <CardMedia
-        component="img"
-        height="200"
-        image={
-          product.imageUrl ||
-          "https://via.placeholder.com/300x200?text=No+Image"
-        }
-        alt={product.name}
-      />
+      <Slider {...settings}>
+        {(product.imageUrls || []).map((url, idx) => (
+          <div key={idx}>
+            <img
+              src={url}
+              alt={`${product.name} image ${idx + 1}`}
+              style={{
+                width: "100%",
+                height: "200px",
+                objectFit: "cover",
+                borderTopLeftRadius: "16px",
+                borderTopRightRadius: "16px",
+              }}
+            />
+          </div>
+        ))}
+      </Slider>
       <CardContent>
         <Typography gutterBottom variant="h6" component="div">
           {product.name}
@@ -22,7 +39,7 @@ const ProductCard = ({ product }) => {
           {product.brand}
         </Typography>
         <Typography variant="subtitle1" color="text.primary" fontWeight={600}>
-          ₹{product.variants[0]?.price}
+          ₹{product.variants?.[0]?.price}
         </Typography>
       </CardContent>
     </Card>
