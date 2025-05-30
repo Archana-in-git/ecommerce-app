@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { TextField, Button, Typography, CircularProgress, Box, Alert,} from "@mui/material";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +25,7 @@ const Register = () => {
 
     
     const { username, email, password, confirmPassword } = formData;
-    if (!username  !email  !password || !confirmPassword) {
+     if (!username || !email || !password || !confirmPassword) {
       setErrorMsg("All fields are required.");
       return;
     }
@@ -123,14 +124,14 @@ const Register = () => {
       {loading ? <CircularProgress size={24} color="inherit" /> : "Register"}
     </Button>
 
+    <Link to ="/Login">
     <Button
       variant="text"
       onClick={() => {
-        window.location.href = "/login";
       }}
     >
       Back to Login
-    </Button>
+    </Button></Link>
   </Box>
 );
 };
