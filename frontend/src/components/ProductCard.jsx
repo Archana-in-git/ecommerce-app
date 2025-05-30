@@ -2,6 +2,7 @@ import React from "react";
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 
 const ProductCard = ({ product }) => {
+  console.log("Rendering ProductCard for:", product);
   return (
     <Card sx={{ maxWidth: 345, borderRadius: 4 }}>
       <CardMedia
