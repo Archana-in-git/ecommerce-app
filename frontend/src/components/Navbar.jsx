@@ -22,16 +22,20 @@ export default function ButtonAppBar() {
           >
             <MenuIcon />
           </IconButton>
-          
-            <Button color="inherit" component={Link} to="/" sx={{ mr:2 }}>
-  Home
-</Button>
 
+          <Button color="inherit" component={Link} to="/" sx={{ mr: 2 }}>
+            Home
+          </Button>
 
-          <Link to ="/Register">
-          <Button color="inherit">Register</Button></Link>
-           <Link to ="/Login">
-          <Button color="inherit">Login</Button></Link>
+          <Link to="/Register">
+            <Button color="inherit">Register</Button>
+          </Link>
+          <Link to="/Login">
+            <Button color="inherit">Login</Button>
+          </Link>
+          <Link to="/NotFOund">
+            <Button color="inherit">NotFound</Button>
+          </Link>
         </Toolbar>
       </AppBar>
     </Box>
