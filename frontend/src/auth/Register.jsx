@@ -17,6 +17,7 @@ const Register = () => {
   return (
     <div>
       <h2>Register</h2>
+      <h3>Hi</h3>
       <form>
         {/* Name Field */}
         {/* Email Field */}
