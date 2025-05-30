@@ -1,45 +1,32 @@
-import React from "react";
-// import { Link } from "react-router-dom";
-// import { AppBar, Toolbar, IconButton, Typography, Badge, Button } from "@mui/material";
-// import { ShoppingCart } from "@mui/icons-material";
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
 
-const Navbar = () => {
-  // TODO: Get user info from AuthContext
-  // const { user, logout } = useContext(AuthContext);
-  // TODO: Get cart count from CartContext
-  // const { cartItems } = useContext(CartContext);
-
+export default function ButtonAppBar() {
   return (
-    <header>
-      {/* TODO: Replace with MUI AppBar */}
-      <nav className="navbar">
-        <div className="logo">
-          {/* TODO: Replace with logo image if available */}
-          <h2>SmartphoneZone</h2>
-        </div>
-
-        <ul className="nav-links">
-          <li>Home</li>
-          <li>Products</li>
-          <li>Cart {/* TODO: Badge(cart count) */}</li>
-
-          {/* TODO: Conditional rendering based on user role */}
-          {/* If user is NOT logged in: */}
-          <li>Login</li>
-          <li>Register</li>
-
-          {/* If user is logged in and not admin: */}
-          {/* <li>Profile</li> */}
-          {/* <li><button onClick={logout}>Logout</button></li> */}
-
-          {/* If admin: */}
-          {/* <li>Admin Dashboard</li> */}
-        </ul>
-
-        {/* TODO: Add hamburger menu for mobile */}
-      </nav>
-    </header>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Home
+          </Typography>
+          <Button color="inherit">Login</Button>
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
-};
-
-export default Navbar;
+}
