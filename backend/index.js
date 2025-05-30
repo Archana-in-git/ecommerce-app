@@ -29,3 +29,11 @@ mongoose
   .catch((err) => {
     console.error("MongoDB connection error:", err);
   });
+const express = require("express");
+const app1 = express();
+const productRoutes = require("./routes/productRoutes");
+
+app.use(express.json()); // to parse JSON bodies
+app.use("/api/products", productRoutes);
+
+// rest of your code, db connection, error handling, etc.
