@@ -12,6 +12,7 @@ import Login from "./auth/Login";
 import Register from "./auth/Register";
 import NotFound from "./pages/NotFound";
 import OutOfStock from "./pages/OutOfStock";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const AppRoutes = () => {
   return (
@@ -27,6 +28,14 @@ const AppRoutes = () => {
       <Route path="/register" element={<Register />} />
       <Route path="*" element={<NotFound />} />
       <Route path="/outofstock" element={<OutOfStock />} />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 };

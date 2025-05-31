@@ -1,82 +1,129 @@
 import React, { useState } from "react";
-import {
-  Box,
-  TextField,
-  Button,
-  Typography,
-  FormControlLabel,
-  Checkbox,
-} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import "./../styles/login.css";
 
 const Login = () => {
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const validate = () => {
+    const newErrors = {};
+    if (!email.includes("@")) newErrors.email = "Enter a valid email.";
+    if (password.length < 6)
+      newErrors.password = "Password must be at least 6 characters.";
+    return newErrors;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // You can send this data to your backend here
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("Remember Me:", rememberMe);
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "https://your-backend.com/api/auth/login",
+        {
+          email,
+          password,
+        }
+      );
+
+      const { token, user } = response.data;
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      login(user); // <-- ADD THIS HERE to update AuthContext
+
+      toast.success("Login successful!");
+
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    } catch (error) {
+      const errMsg =
+        error.response?.data?.message || "Invalid email or password.";
+      toast.error(errMsg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <Box
-      sx={{
-        maxWidth: 400,
-        margin: "auto",
-        mt: 10,
-        p: 4,
-        boxShadow: 3,
-        borderRadius: 2,
-      }}
-    >
-      <Typography variant="h4" gutterBottom>
-        Login
-      </Typography>
+    <div className="login-container">
+      <h2 className="login-title">Welcome Back</h2>
       <form onSubmit={handleSubmit}>
-        <TextField
-          fullWidth
-          label="Email"
+        <input
           type="email"
-          variant="outlined"
-          margin="normal"
-          required
+          placeholder="Email"
+          className="login-input"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <TextField
-          fullWidth
-          label="Password"
-          type="password"
-          variant="outlined"
-          margin="normal"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
-              color="primary"
-            />
-          }
-          label="Remember Me"
-        />
-        <Button
-          fullWidth
-          type="submit"
-          variant="contained"
-          color="primary"
-          sx={{ mt: 2 }}
-        >
-          Login
-        </Button>
+        {errors.email && <p className="login-error">{errors.email}</p>}
+
+        <div className="login-password-wrapper">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            className="login-input"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <span
+            className="login-password-toggle"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+          </span>
+        </div>
+        {errors.password && <p className="login-error">{errors.password}</p>}
+
+        <div className="login-options">
+          <input
+            type="checkbox"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
+          />
+          <label>Remember Me</label>
+        </div>
+
+        <div className="login-buttons">
+          <button type="submit" className="login-btn login" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </button>
+          <button
+            type="button"
+            className="login-btn cancel"
+            onClick={() => navigate("/")}
+          >
+            Cancel
+          </button>
+        </div>
       </form>
-    </Box>
+
+      <div className="login-footer">
+        <a href="/register">New user?</a>
+        <a href="/forgot-password">Forgot Password?</a>
+      </div>
+
+      <ToastContainer position="top-center" autoClose={3000} />
+    </div>
   );
 };
 
