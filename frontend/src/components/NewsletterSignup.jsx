@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Typography, TextField, Button, Grid, Alert } from "@mui/material";
 import { motion } from "framer-motion";
-import { sendNewsletterSignup } from "../services/userService"; // ✅ create this function
+import { sendNewsletterSignup } from "../services/userService";
 
 const NewsletterSignup = () => {
   const [formData, setFormData] = useState({ name: "", email: "" });
@@ -29,12 +29,25 @@ const NewsletterSignup = () => {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
     >
-      <Box sx={{ backgroundColor: "#f5f5f5", p: 4, borderRadius: 3, mt: 6 }}>
-        <Typography variant="h5" gutterBottom>
+      <Box
+        sx={{
+          backgroundColor: "var(--dark-bg-alt)",
+          color: "var(--text-color)",
+          p: 4,
+          borderRadius: "var(--border-radius)",
+          boxShadow: "var(--shadow-soft)",
+          mt: 6,
+        }}
+      >
+        <Typography
+          variant="h5"
+          gutterBottom
+          sx={{ color: "var(--text-color)" }}
+        >
           Stay Updated with Our Newsletter
         </Typography>
-        <Typography variant="body1" sx={{ mb: 3 }}>
-          Get latest deals and smartphone news directly to your inbox.
+        <Typography variant="body1" sx={{ mb: 3, color: "#ccc" }}>
+          Get the latest deals and smartphone news directly to your inbox.
         </Typography>
 
         <form onSubmit={handleSubmit}>
@@ -47,6 +60,17 @@ const NewsletterSignup = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
+                variant="filled"
+                InputProps={{
+                  style: {
+                    backgroundColor: "#2a2e36",
+                    color: "#fff",
+                    borderRadius: "8px",
+                  },
+                }}
+                InputLabelProps={{
+                  style: { color: "#bbb" },
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -58,10 +82,33 @@ const NewsletterSignup = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
+                variant="filled"
+                InputProps={{
+                  style: {
+                    backgroundColor: "#2a2e36",
+                    color: "#fff",
+                    borderRadius: "8px",
+                  },
+                }}
+                InputLabelProps={{
+                  style: { color: "#bbb" },
+                }}
               />
             </Grid>
             <Grid item xs={12}>
-              <Button variant="contained" type="submit">
+              <Button
+                variant="contained"
+                type="submit"
+                sx={{
+                  backgroundColor: "var(--primary-color)",
+                  color: "#fff",
+                  textTransform: "none",
+                  borderRadius: "8px",
+                  ":hover": {
+                    backgroundColor: "#5aa246",
+                  },
+                }}
+              >
                 Subscribe
               </Button>
             </Grid>

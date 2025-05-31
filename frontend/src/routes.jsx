@@ -11,6 +11,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
 import NotFound from "./pages/NotFound";
+import OutOfStock from "./pages/OutOfStock";
 
 const AppRoutes = () => {
   return (
@@ -25,6 +26,7 @@ const AppRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="*" element={<NotFound />} />
+      <Route path="/outofstock" element={<OutOfStock />} />
     </Routes>
   );
 };
