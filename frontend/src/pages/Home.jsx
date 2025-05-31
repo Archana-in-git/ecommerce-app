@@ -23,6 +23,7 @@ import PromotionalOffers from "../components/PromotionalOffers";
 import Testimonials from "../components/Testimonials";
 import TrustedBrands from "../components/TrustedBrands";
 import NewsletterSignup from "../components/NewsletterSignup";
+import FlashSaleSection from "../components/FlashSaleSection";
 
 const brandOptions = ["All", "Apple", "Samsung", "Realme"];
 
@@ -32,17 +33,39 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Utility: Add flash sale metadata
+  const addFlashSaleMeta = (products) => {
+    return products.map((product) => {
+      if (
+        ["iPhone 15", "iPhone 15 Pro Max", "Samsung Galaxy S25 Edge"].includes(
+          product.name
+        )
+      ) {
+        return {
+          ...product,
+          isOnSale: true,
+          salePrice: Number(product.price) - 5000 || 74999,
+          saleEndTime: new Date(Date.now() + 2 * 60 * 60 * 1000),
+        };
+      }
+      return product;
+    });
+  };
+
+  // Fetch products and enhance with flash sale metadata
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await getAllProducts();
-        setProducts(res);
+        const withSaleMeta = addFlashSaleMeta(res);
+        setProducts(withSaleMeta);
       } catch (error) {
         console.error("Failed to fetch products", error);
       } finally {
         setLoading(false);
       }
     };
+
     fetchProducts();
   }, []);
 
@@ -89,6 +112,8 @@ const Home = () => {
             </TextField>
           </Grid>
         </Grid>
+        {!loading && <FlashSaleSection products={products} />}
+
         {/* 🛍️ Featured Products */}
         {!loading && filteredProducts.length > 0 && (
           <FeaturedCarousel products={filteredProducts.slice(0, 6)} />
@@ -125,15 +150,21 @@ const Home = () => {
         {!loading && <TrustedBrands />}
         <NewsletterSignup />
         {/* 📱 CTA */}
-        <Box textAlign="center" mt={5}>
-          <Button
-            variant="contained"
-            size="large"
-            onClick={() => navigate("/products")}
-          >
-            View All Products
-          </Button>
-        </Box>
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
+          <Box textAlign="center" mt={5}>
+            <Button
+              variant="contained"
+              size="large"
+              onClick={() => navigate("/products")}
+            >
+              View All Products
+            </Button>
+          </Box>
+        </motion.div>
       </Container>
     </Box>
   );
