@@ -18,6 +18,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import { getAllProducts } from "../services/productService";
 import HeroCarousel from "../components/HeroCarousel";
 import FeaturedCarousel from "../components/FeaturedCarousel";
+import { motion } from "framer-motion";
+import PromotionalOffers from "../components/PromotionalOffers";
+import Testimonials from "../components/Testimonials";
+import TrustedBrands from "../components/TrustedBrands";
 
 const brandOptions = ["All", "Apple", "Samsung", "Realme"];
 
@@ -84,12 +88,40 @@ const Home = () => {
             </TextField>
           </Grid>
         </Grid>
-
         {/* 🛍️ Featured Products */}
         {!loading && filteredProducts.length > 0 && (
           <FeaturedCarousel products={filteredProducts.slice(0, 6)} />
         )}
 
+        <Box sx={{ mt: 8 }}>
+          <Typography variant="h5" gutterBottom>
+            Explore by Category
+          </Typography>
+          <Grid container spacing={2}>
+            {["Budget", "Flagship", "Gaming"].map((category, index) => (
+              <Grid item xs={12} sm={4} key={category}>
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.2, duration: 0.5 }}
+                >
+                  <Card
+                    sx={{ p: 3, textAlign: "center", cursor: "pointer" }}
+                    onClick={() => navigate("/products")}
+                  >
+                    <Typography variant="h6">{category} Phones</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Top models curated for this category
+                    </Typography>
+                  </Card>
+                </motion.div>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+        {!loading && <PromotionalOffers />}
+        {!loading && <Testimonials />}
+        {!loading && <TrustedBrands />}
         {/* 📱 CTA */}
         <Box textAlign="center" mt={5}>
           <Button
