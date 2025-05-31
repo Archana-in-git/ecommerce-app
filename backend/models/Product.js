@@ -9,19 +9,16 @@ const variantSchema = new mongoose.Schema({
 const productSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    brand: String,
-    display: String,
-    processor: String,
-    battery: String,
-    camera: String,
-    os: String,
-    sim: String,
-    material: String,
-    weight: String,
-    imageUrls: {
-      type: [String],
-      required: false,
-    },
+    brand: { type: String, required: true },
+    display: { type: String },
+    processor: { type: String },
+    battery: { type: String },
+    camera: { type: String },
+    os: { type: String },
+    sim: { type: String },
+    material: { type: String },
+    weight: { type: String },
+    imageUrls: [{ type: String }], // ✅ Corrected from imageUrl
     variants: [variantSchema],
   },
   {
