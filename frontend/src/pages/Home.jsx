@@ -22,6 +22,7 @@ import { motion } from "framer-motion";
 import PromotionalOffers from "../components/PromotionalOffers";
 import Testimonials from "../components/Testimonials";
 import TrustedBrands from "../components/TrustedBrands";
+import NewsletterSignup from "../components/NewsletterSignup";
 
 const brandOptions = ["All", "Apple", "Samsung", "Realme"];
 
@@ -122,6 +123,7 @@ const Home = () => {
         {!loading && <PromotionalOffers />}
         {!loading && <Testimonials />}
         {!loading && <TrustedBrands />}
+        <NewsletterSignup />
         {/* 📱 CTA */}
         <Box textAlign="center" mt={5}>
           <Button
