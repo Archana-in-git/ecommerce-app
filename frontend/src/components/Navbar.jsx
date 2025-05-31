@@ -1,66 +1,88 @@
-import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
+import React, { useState } from "react";
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Button,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  Box,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Link } from "react-router-dom";
-import HomeIcon from "@mui/icons-material/Home";
+import "./../styles/navbar.css";
+import logo from "../assets/logo.png";
 
-export default function ButtonAppBar() {
+const navLinks = [
+  { title: "Home", path: "/" },
+  { title: "Register", path: "/register" },
+  { title: "Login", path: "/login" },
+  { title: "Checkout", path: "/checkout" },
+];
+
+export default function Navbar() {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const toggleDrawer = (open) => () => {
+    setDrawerOpen(open);
+  };
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
+    <AppBar
+      position="static"
+      className="navbar"
+      sx={{ backgroundColor: "transparent", boxShadow: "none" }}
+    >
+      <Toolbar className="toolbar">
+        {/* Logo */}
+        <Link to="/" className="logo-link">
+          <img src={logo} alt="TechCart Logo" className="logo" />
+        </Link>
 
-          <Link to="/">
-            <IconButton
-              size="large"
-              edge="start"
-              sx={{ mr: 2 }}
-              color="inherit"
-            >
-              <HomeIcon />
-            </IconButton>
-          </Link>
-
-          <Link to="/Register">
-            <Button color="inherit">Register</Button>
-          </Link>
-          <Link to="/Login">
-            <Button color="inherit">Login</Button>
-          </Link>
-          <Link to="/NotFOund">
-            <Button color="inherit">NotFound</Button>
-          </Link>
-          <Link to="/Checkout">
-            <Button color="inherit">Checkout</Button>
-          </Link>
-
-          <Link to="/Cart">
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-haspopup="true"
-              color="inherit"
-            >
+        {/* Desktop Nav Links */}
+        <Box className="nav-links">
+          {navLinks.map((link) => (
+            <Link to={link.path} key={link.title} className="nav-button">
+              <Button color="inherit">{link.title}</Button>
+            </Link>
+          ))}
+          <Link to="/cart">
+            <IconButton color="inherit">
               <ShoppingCartIcon />
             </IconButton>
           </Link>
-        </Toolbar>
-      </AppBar>
-    </Box>
+        </Box>
+
+        {/* Mobile Menu Button */}
+        <IconButton
+          edge="end"
+          color="inherit"
+          aria-label="menu"
+          className="menu-button"
+          onClick={toggleDrawer(true)}
+        >
+          <MenuIcon />
+        </IconButton>
+      </Toolbar>
+
+      {/* Drawer for mobile */}
+      <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
+        <Box role="presentation" onClick={toggleDrawer(false)}>
+          <List>
+            {navLinks.map((link) => (
+              <ListItem button key={link.title} component={Link} to={link.path}>
+                <ListItemText primary={link.title} />
+              </ListItem>
+            ))}
+            <ListItem button component={Link} to="/cart">
+              <ListItemText primary="Cart" />
+            </ListItem>
+          </List>
+        </Box>
+      </Drawer>
+    </AppBar>
   );
 }

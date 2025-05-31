@@ -1,0 +1,84 @@
+/* navbar.css */
+
+/* NAVBAR STYLING */
+.navbar {
+  background: linear-gradient(90deg, #68cb3a 0%, #1b221a 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* FLEX LAYOUT */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+/* LOGO STYLING */
+.logo {
+  height: 45px;
+  width: auto;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+/* DESKTOP NAV LINKS */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.nav-button {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease-in-out;
+}
+
+.nav-button:hover {
+  color: #6dbd50;
+  transform: scale(1.05);
+}
+
+/* MENU BUTTON FOR SMALL SCREENS */
+.menu-button {
+  display: none;
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+
+  .menu-button {
+    display: block;
+  }
+}
+
+/* DRAWER STYLING */
+.MuiDrawer-paper {
+  background-color: #1c1f26 !important;
+  color: #ffffff;
+}
+
+.MuiListItemText-primary {
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.MuiListItem-root:hover {
+  background-color: rgba(109, 189, 80, 0.1);
+}
+.MuiAppBar-root.navbar {
+  background-color: #6dbd50 !important;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
