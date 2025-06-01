@@ -1,0 +1,14 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+.footer-link {
+  color: #ccc;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #fff;
+}

@@ -8,6 +8,7 @@ import {
   Grid,
 } from "@mui/material";
 import { motion } from "framer-motion";
+import "../styles/Testimonials.css";
 
 const testimonials = [
   {
@@ -30,8 +31,11 @@ const testimonials = [
 
 const Testimonials = () => {
   return (
-    <Box sx={{ mt: 10, textAlign: "center" }}>
-      <Typography variant="h5" gutterBottom>
+    <Box
+      className="testimonials-container"
+      sx={{ mt: 10, textAlign: "center" }}
+    >
+      <Typography className="testimonials-heading" variant="h5" gutterBottom>
         💬 What Our Customers Say
       </Typography>
       <Grid container spacing={3} justifyContent="center" sx={{ mt: 2 }}>
@@ -42,17 +46,21 @@ const Testimonials = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.2 }}
             >
-              <Card sx={{ p: 3 }}>
+              <Card className="testimonial-card" sx={{ p: 3 }}>
                 <Avatar
                   src={t.avatar}
                   alt={t.name}
                   sx={{ width: 60, height: 60, mx: "auto", mb: 2 }}
                 />
                 <CardContent>
-                  <Typography variant="subtitle1" gutterBottom>
+                  <Typography
+                    className="testimonial-name"
+                    variant="subtitle1"
+                    gutterBottom
+                  >
                     {t.name}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography className="testimonial-comment" variant="body2">
                     “{t.comment}”
                   </Typography>
                 </CardContent>
