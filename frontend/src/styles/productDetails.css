@@ -1,0 +1,38 @@
+.product-details-container {
+  padding: 2rem;
+}
+
+.product-details-image {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+  object-fit: contain;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-details-card {
+  padding: 1.5rem;
+  border-radius: 12px;
+}
+
+.price {
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+.add-to-cart-btn {
+  margin-top: 1rem;
+  padding: 10px 20px;
+  font-weight: 600;
+}
+
+.variant-list {
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.2rem;
+}
