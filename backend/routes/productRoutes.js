@@ -1,7 +1,7 @@
 import express from "express";
 import {
   createProduct,
-  getAllProducts,
+  getProducts, // updated from getAllProducts
   getProductById,
   updateProduct,
   deleteProduct,
@@ -9,10 +9,19 @@ import {
 
 const router = express.Router();
 
+// Create a new product
 router.post("/", createProduct);
-router.get("/", getAllProducts);
+
+// Get all products or filtered products
+router.get("/", getProducts); // changed from "/:id" to "/" for list endpoint
+
+// Get a single product by ID
 router.get("/:id", getProductById);
+
+// Update a product by ID
 router.put("/:id", updateProduct);
+
+// Delete a product by ID
 router.delete("/:id", deleteProduct);
 
 export default router;

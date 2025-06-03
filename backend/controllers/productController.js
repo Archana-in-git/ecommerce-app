@@ -12,14 +12,32 @@ export const createProduct = async (req, res) => {
   }
 };
 
-// Get all products
-export const getAllProducts = async (req, res) => {
+// Get products with optional search and filters
+export const getProducts = async (req, res) => {
   try {
-    console.log("products");
-    const products = await Product.find();
+    const { search, category, location } = req.query;
+
+    const filter = {};
+
+    if (search) {
+      filter.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { description: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    if (category) {
+      filter.category = category;
+    }
+
+    if (location) {
+      filter.location = location;
+    }
+
+    const products = await Product.find(filter);
     res.json(products);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Server error" });
   }
 };
 

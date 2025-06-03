@@ -10,6 +10,8 @@ const productSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     brand: { type: String, required: true },
+    description: { type: String }, // optional for now
+    category: { type: String, default: "smartphone" },
     display: { type: String },
     processor: { type: String },
     battery: { type: String },
