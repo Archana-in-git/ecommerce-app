@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import "./../styles/login.css";
+import { login as loginUser } from "../services/authService";
 
 const Login = () => {
   const { login } = useAuth();
@@ -17,6 +17,7 @@ const Login = () => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
+  // validate and handleSubmit as before, with the await calls inside handleSubmit
   const validate = () => {
     const newErrors = {};
     if (!email.includes("@")) newErrors.email = "Enter a valid email.";
@@ -35,26 +36,16 @@ const Login = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post(
-        "https://your-backend.com/api/auth/login",
-        {
-          email,
-          password,
-        }
-      );
-
+      const response = await loginUser({ email, password });
       const { token, user } = response.data;
 
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 
-      login(user); // <-- ADD THIS HERE to update AuthContext
+      login(user, token); // update context
 
       toast.success("Login successful!");
-
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
+      setTimeout(() => navigate("/"), 2000);
     } catch (error) {
       const errMsg =
         error.response?.data?.message || "Invalid email or password.";

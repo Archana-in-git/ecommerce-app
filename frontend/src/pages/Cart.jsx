@@ -7,7 +7,10 @@ const Cart = () => {
 
   const getTotal = () =>
     cartItems.reduce(
-      (sum, item) => sum + (item.variants?.[0]?.price || 0) * item.quantity,
+      (sum, item) =>
+        sum +
+        (item.selectedVariant?.price || item.variants?.[0]?.price || 0) *
+          item.quantity,
       0
     );
 
@@ -27,7 +30,13 @@ const Cart = () => {
 
       <Grid container spacing={3}>
         {cartItems.map((item) => (
-          <Grid item xs={12} md={6} lg={4} key={item._id}>
+          <Grid
+            item
+            xs={12}
+            md={6}
+            lg={4}
+            key={`${item._id}-${item.selectedVariant?.storage}`}
+          >
             <Card>
               <CardContent>
                 <img
@@ -36,14 +45,27 @@ const Cart = () => {
                   style={{ width: "100%", height: 200, objectFit: "cover" }}
                 />
                 <Typography variant="h6">{item.name}</Typography>
+                {item.selectedVariant && (
+                  <Typography>
+                    Variant: Storage {item.selectedVariant.storage}, Price ₹
+                    {item.selectedVariant.price}
+                  </Typography>
+                )}
                 <Typography>Qty: {item.quantity}</Typography>
                 <Typography>
-                  Price: ₹{item.variants?.[0]?.price} × {item.quantity}
+                  Price: ₹
+                  {item.selectedVariant?.price || item.variants?.[0]?.price} ×{" "}
+                  {item.quantity}
                 </Typography>
                 <Button
                   variant="outlined"
                   color="error"
-                  onClick={() => removeFromCart(item._id)}
+                  onClick={() =>
+                    removeFromCart({
+                      _id: item._id,
+                      selectedVariant: item.selectedVariant,
+                    })
+                  }
                 >
                   Remove
                 </Button>

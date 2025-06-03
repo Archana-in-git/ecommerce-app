@@ -1,22 +1,44 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getProductById } from "../services/productService";
-import { Card, CardContent, Typography, Button, Grid } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  Grid,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
 import "../styles/productDetails.css";
 import { useCart } from "../context/CartContext";
 
 function ProductDetails() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const [selectedVariant, setSelectedVariant] = useState(null);
   const { addToCart } = useCart();
 
   useEffect(() => {
     getProductById(id)
-      .then((data) => setProduct(data))
+      .then((data) => {
+        setProduct(data);
+        if (data.variants && data.variants.length > 0) {
+          setSelectedVariant(data.variants[0]); // default select first variant
+        }
+      })
       .catch(console.error);
   }, [id]);
 
   if (!product) return <div className="loading">Loading...</div>;
+
+  const handleVariantChange = (e) => {
+    const variantStorage = e.target.value;
+    const variant = product.variants.find((v) => v.storage === variantStorage);
+    setSelectedVariant(variant);
+  };
 
   return (
     <div className="product-details-container">
@@ -38,6 +60,7 @@ function ProductDetails() {
               <Typography variant="subtitle1" gutterBottom>
                 Brand: {product.brand}
               </Typography>
+
               <Typography variant="body1">
                 Display: {product.display}
               </Typography>
@@ -56,20 +79,44 @@ function ProductDetails() {
               <Typography variant="body1">Weight: {product.weight}</Typography>
 
               {product.variants?.length > 0 && (
-                <Typography variant="body1" className="variant-list">
-                  Variants: {product.variants.map((v) => v.name).join(", ")}
-                </Typography>
-              )}
+                <>
+                  <FormControl fullWidth margin="normal" size="small">
+                    <InputLabel id="variant-select-label">
+                      Select Variant
+                    </InputLabel>
+                    <Select
+                      labelId="variant-select-label"
+                      value={selectedVariant?.storage || ""}
+                      label="Select Variant"
+                      onChange={handleVariantChange}
+                    >
+                      {product.variants.map((v) => (
+                        <MenuItem key={v.storage} value={v.storage}>
+                          Storage: {v.storage} — Price: ₹{v.price} — Colors:{" "}
+                          {v.colorOptions.join(", ")}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
 
-              <Typography variant="h6" color="secondary" className="price">
-                ₹{product.price}
-              </Typography>
+                  <Typography
+                    variant="h6"
+                    color="secondary"
+                    className="price"
+                    sx={{ mt: 2 }}
+                  >
+                    Price: ₹{selectedVariant?.price}
+                  </Typography>
+                </>
+              )}
 
               <Button
                 variant="contained"
                 color="primary"
                 className="add-to-cart-btn"
-                onClick={() => addToCart(product)}
+                sx={{ mt: 3 }}
+                onClick={() => addToCart({ ...product, selectedVariant })}
+                disabled={!selectedVariant}
               >
                 Add to Cart
               </Button>

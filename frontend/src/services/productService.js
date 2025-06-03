@@ -7,8 +7,9 @@ console.log(
 );
 
 // Get all products
-export const getAllProducts = async () => {
-  const response = await axios.get(`${BASE_URL}/products`);
+export const getAllProducts = async (filters = {}) => {
+  const params = new URLSearchParams(filters).toString();
+  const response = await axios.get(`${BASE_URL}/products?${params}`);
   return response.data;
 };
 
