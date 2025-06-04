@@ -1,4 +1,3 @@
-// models/User.js
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
@@ -16,6 +15,20 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, "Password is required"],
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
+    phone: {
+      type: String,
+    },
+    address: {
+      type: String,
+    },
+    profilePicture: {
+      type: String,
     },
   },
   { timestamps: true }

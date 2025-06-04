@@ -1,4 +1,5 @@
-const mongoose = require("mongoose");
+// models/Newsletter.js
+import mongoose from "mongoose";
 
 const newsletterSchema = new mongoose.Schema(
   {
@@ -8,4 +9,6 @@ const newsletterSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Newsletter", newsletterSchema);
+const Newsletter = mongoose.model("Newsletter", newsletterSchema);
+
+export default Newsletter;
