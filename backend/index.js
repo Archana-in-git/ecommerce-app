@@ -6,6 +6,7 @@ import productRoutes from "./routes/productRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import errorHandler from "./middleware/errorHandler.js";
 
 dotenv.config();
 const app = express();
@@ -20,6 +21,9 @@ app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+// after all routes
+app.use(errorHandler);
+
 app.get("/", (req, res) => {
   res.send("API is running");
 });
