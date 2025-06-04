@@ -1,14 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Avatar, Box, Button, TextField, Typography } from "@mui/material";
+import { getUserProfile, updateUserProfile } from "../services/userService";
 
 const UserProfile = () => {
   const [profile, setProfile] = useState({
-    name: "",
+    username: "",
     email: "",
     phone: "",
     address: "",
     profilePicture: "",
   });
+
+  useEffect(() => {
+    async function fetchProfile() {
+      try {
+        const data = await getUserProfile();
+        setProfile(data);
+      } catch (error) {
+        console.error("Failed to fetch profile", error);
+      }
+    }
+    fetchProfile();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await updateUserProfile(profile);
+      alert("Profile updated successfully!");
+    } catch (error) {
+      console.error("Failed to update profile", error);
+      alert("Failed to update profile");
+    }
+  };
 
   const handleChange = (e) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
@@ -20,13 +44,6 @@ const UserProfile = () => {
       const imageUrl = URL.createObjectURL(file);
       setProfile({ ...profile, profilePicture: imageUrl });
     }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("User Profile:", profile);
-    alert("Profile saved successfully!");
-    // In real apps, send profile to backend API here
   };
 
   return (

@@ -22,28 +22,32 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  const toggleDrawer = (open) => () => {
-    setDrawerOpen(open);
-  };
+  const toggleDrawer = (open) => () => setDrawerOpen(open);
 
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
 
+  // Before return (
   const guestLinks = [
     { title: "Home", path: "/" },
+    { title: "Products", path: "/products" },
     { title: "Register", path: "/register" },
     { title: "Login", path: "/login" },
-    { title: "Checkout", path: "/checkout" },
   ];
 
   const userLinks = [
     { title: "Home", path: "/" },
-    { title: "Checkout", path: "/checkout" },
+    { title: "Products", path: "/products" },
     { title: "Profile", path: "/profile" },
-    // Add more links here if needed
+    { title: "Checkout", path: "/checkout" },
   ];
+
+  // ✅ Conditionally show admin link
+  if (user && user.role === "admin") {
+    userLinks.push({ title: "Admin", path: "/admin" });
+  }
 
   return (
     <AppBar
@@ -99,6 +103,7 @@ export default function Navbar() {
                 <ListItemText primary={link.title} />
               </ListItem>
             ))}
+
             <ListItem button component={Link} to="/cart">
               <ListItemText primary="Cart" />
             </ListItem>

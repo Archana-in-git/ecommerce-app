@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import {
-  Box,
   Typography,
   TextField,
   Button,
   Grid,
-  Paper,
   Divider,
   Radio,
   RadioGroup,
@@ -17,6 +15,7 @@ import {
 import { useCart } from "../context/CartContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "../styles/Checkout.css"; // 👈 Import custom CSS
 
 const Checkout = () => {
   const [shippingInfo, setShippingInfo] = useState({
@@ -85,7 +84,7 @@ const Checkout = () => {
 
       clearCart();
       setOpenSnackbar(true);
-      setTimeout(() => navigate("/"), 3000); // Redirect after success
+      setTimeout(() => navigate("/"), 3000);
     } catch (err) {
       setError(err.response?.data?.message || "Order failed.");
     }
@@ -102,15 +101,15 @@ const Checkout = () => {
     .toFixed(2);
 
   return (
-    <Box sx={{ maxWidth: 900, mx: "auto", mt: 4, p: 2 }}>
-      <Typography variant="h4" gutterBottom>
+    <div className="checkout-container">
+      <Typography variant="h4" className="checkout-title">
         Checkout
       </Typography>
       <Grid container spacing={4}>
         {/* Shipping Form */}
         <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 3 }}>
-            <Typography variant="h6" gutterBottom>
+          <div className="checkout-box">
+            <Typography variant="h6" className="section-title">
               Shipping Address
             </Typography>
             <Grid container spacing={2}>
@@ -119,19 +118,22 @@ const Checkout = () => {
                   <Grid item xs={12} key={field}>
                     <TextField
                       fullWidth
+                      variant="outlined"
                       label={field.charAt(0).toUpperCase() + field.slice(1)}
                       name={field}
                       value={shippingInfo[field]}
                       onChange={handleInputChange}
-                      required
+                      className="checkout-input"
                     />
                   </Grid>
                 )
               )}
             </Grid>
 
-            <Box mt={3}>
-              <FormLabel component="legend">Payment Method</FormLabel>
+            <div className="payment-method">
+              <FormLabel component="legend" className="section-title">
+                Payment Method
+              </FormLabel>
               <RadioGroup
                 value={paymentMethod}
                 onChange={(e) => setPaymentMethod(e.target.value)}
@@ -147,58 +149,44 @@ const Checkout = () => {
                   label="PayPal"
                 />
               </RadioGroup>
-            </Box>
-          </Paper>
+            </div>
+          </div>
         </Grid>
 
         {/* Order Summary */}
         <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 3 }}>
-            <Typography variant="h6" gutterBottom>
+          <div className="checkout-box">
+            <Typography variant="h6" className="section-title">
               Order Summary
             </Typography>
             {cartItems.map((item, idx) => (
-              <Box
-                key={idx}
-                display="flex"
-                justifyContent="space-between"
-                my={1}
-              >
-                <Typography>
+              <div key={idx} className="summary-item">
+                <span>
                   {item.name} × {item.quantity}
-                </Typography>
-                <Typography>
+                </span>
+                <span>
                   ₹
                   {(item.selectedVariant?.price ||
                     item.variants?.[0]?.price ||
                     0) * item.quantity}
-                </Typography>
-              </Box>
+                </span>
+              </div>
             ))}
-            <Divider sx={{ my: 2 }} />
-            <Box display="flex" justifyContent="space-between">
-              <Typography variant="subtitle1">
-                <strong>Total:</strong>
-              </Typography>
-              <Typography variant="subtitle1">
-                <strong>₹{totalPrice}</strong>
-              </Typography>
-            </Box>
-            {error && (
-              <Typography color="error" mt={2}>
-                {error}
-              </Typography>
-            )}
+            <Divider className="divider" />
+            <div className="summary-total">
+              <strong>Total:</strong>
+              <strong>₹{totalPrice}</strong>
+            </div>
+            {error && <p className="checkout-error">{error}</p>}
             <Button
               variant="contained"
-              color="primary"
               fullWidth
-              sx={{ mt: 3 }}
               onClick={handlePlaceOrder}
+              className="checkout-btn"
             >
               Place Order
             </Button>
-          </Paper>
+          </div>
         </Grid>
       </Grid>
 
@@ -215,7 +203,7 @@ const Checkout = () => {
           Order placed successfully!
         </Alert>
       </Snackbar>
-    </Box>
+    </div>
   );
 };
 

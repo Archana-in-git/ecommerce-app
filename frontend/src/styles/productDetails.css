@@ -1,38 +1,118 @@
 .product-details-container {
-  padding: 2rem;
+  padding: 3rem 2rem;
+  background-color: #121212;
+  color: #ffffff;
+  min-height: 100vh;
 }
 
-.product-details-image {
+.product-image {
   width: 100%;
-  max-width: 400px;
-  border-radius: 10px;
-  object-fit: contain;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.product-details-card {
-  padding: 1.5rem;
   border-radius: 12px;
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.05);
 }
 
-.price {
-  margin-top: 1rem;
+.product-card {
+  background-color: #1e1e1e !important;
+  border-radius: 16px;
+  box-shadow: 0 0 24px rgba(0, 255, 136, 0.2);
+  padding: 1.5rem;
+}
+
+.product-title {
+  color: #00ff88;
   font-weight: bold;
 }
 
-.add-to-cart-btn {
-  margin-top: 1rem;
-  padding: 10px 20px;
+.product-brand {
+  color: #bbbbbb;
+  margin-bottom: 1rem;
+}
+
+.specs {
+  margin: 1rem 0;
+}
+
+.specs .MuiTypography-root {
+  color: #cccccc;
+  margin-bottom: 0.3rem;
+}
+
+.product-price {
+  color: #00e676;
   font-weight: 600;
 }
 
-.variant-list {
-  margin-top: 0.5rem;
-  font-style: italic;
+.add-to-cart-btn {
+  background-color: #00ff88 !important;
+  color: #000 !important;
+  margin-top: 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: 0.3s;
 }
 
-.loading {
-  text-align: center;
-  padding: 3rem;
-  font-size: 1.2rem;
+.add-to-cart-btn:hover {
+  background-color: #00e676 !important;
+}
+.product-details-container {
+  padding: 3rem 2rem;
+  background-color: #121212;
+  color: #ffffff;
+  min-height: 100vh;
+}
+
+.product-image {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.05);
+  background-color: #ffffff;
+  padding: 1rem;
+}
+
+.product-card {
+  border-radius: 16px;
+  box-shadow: 0 0 18px rgba(0, 255, 136, 0.15);
+  padding: 1.5rem;
+}
+
+.light-card {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.product-title {
+  color: #2e2e2e;
+  font-weight: bold;
+}
+
+.product-brand {
+  color: #555555;
+  margin-bottom: 1rem;
+}
+
+.specs {
+  margin: 1rem 0;
+}
+
+.specs .MuiTypography-root {
+  color: #333333;
+  margin-bottom: 0.3rem;
+}
+
+.product-price {
+  color: #007e66;
+  font-weight: 600;
+}
+
+.add-to-cart-btn {
+  background-color: #00c37a !important;
+  color: #fff !important;
+  margin-top: 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #00a86b !important;
 }

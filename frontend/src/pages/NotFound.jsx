@@ -1,36 +1,32 @@
 import React from "react";
-import { Box, Typography, Button, Container } from "@mui/material";
+import { Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import "../styles/NotFound.css"; // 👈 Custom CSS
 
 const NotFound = () => {
   const navigate = useNavigate();
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        minHeight: "100vh",
-        backgroundColor: "#f5f5f5",
-      }}
-    >
-      <Container maxWidth="sm" sx={{ textAlign: "center" }}>
-        <Typography variant="h1" color="primary" gutterBottom>
+    <div className="notfound-container">
+      <div className="notfound-content">
+        <Typography variant="h1" className="notfound-title">
           404
         </Typography>
-        <Typography variant="h5" color="textSecondary" paragraph>
-          Oops! The page you're looking for doesn't exist.
+        <Typography variant="h5" className="notfound-message">
+          Oops! Looks like you're lost in cyberspace.
+        </Typography>
+        <Typography variant="body1" className="notfound-subtext">
+          The page you’re looking for isn’t here.
         </Typography>
         <Button
           variant="contained"
-          color="primary"
+          className="notfound-button"
           onClick={() => navigate("/")}
         >
-          Go to Homepage
+          Back to Homepage
         </Button>
-      </Container>
-    </Box>
+      </div>
+    </div>
   );
 };
 

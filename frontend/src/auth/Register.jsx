@@ -1,6 +1,14 @@
 import React, { useState } from "react";
-import { TextField, Button, Typography, CircularProgress, Box, Alert,} from "@mui/material";
+import {
+  TextField,
+  Button,
+  Typography,
+  CircularProgress,
+  Box,
+  Alert,
+} from "@mui/material";
 import { Link } from "react-router-dom";
+import "../styles/login.css"; // Ensure this file is imported
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -14,18 +22,17 @@ const Register = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
-  const handleChange = (e) => {
+  const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg("");
     setSuccessMsg("");
 
-    
     const { username, email, password, confirmPassword } = formData;
-     if (!username || !email || !password || !confirmPassword) {
+
+    if (!username || !email || !password || !confirmPassword) {
       setErrorMsg("All fields are required.");
       return;
     }
@@ -40,7 +47,7 @@ const Register = () => {
 
     try {
       setLoading(true);
-      
+
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -48,12 +55,15 @@ const Register = () => {
       });
 
       const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.message || "Something went wrong.");
-      }
+      if (!res.ok) throw new Error(data.message || "Something went wrong.");
 
       setSuccessMsg("Registration successful!");
-      setFormData({ username: "", email: "", password: "", confirmPassword: "" });
+      setFormData({
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
     } catch (error) {
       setErrorMsg(error.message);
     } finally {
@@ -61,79 +71,68 @@ const Register = () => {
     }
   };
 
-  return (<Box
-    component="form"
-    onSubmit={handleSubmit}
-    sx={{
-      maxWidth: 400,
-      mx: "auto",
-      mt: 4,
-      p: 3,
-      boxShadow: 3,
-      borderRadius: 2,
-      display: "flex",
-      flexDirection: "column",
-      gap: 2,
-      bgcolor:"white"
-    }}
-  >
-    <Typography variant="h5" textAlign="center">
-      Register
-    </Typography>
+  return (
+    <Box component="form" onSubmit={handleSubmit} className="login-container">
+      <Typography variant="h4" className="login-title">
+        Create Account
+      </Typography>
 
-    {errorMsg && <Alert severity="error">{errorMsg}</Alert>}
-    {successMsg && <Alert severity="success">{successMsg}</Alert>}
+      {errorMsg && (
+        <Alert severity="error" className="login-error">
+          {errorMsg}
+        </Alert>
+      )}
+      {successMsg && <Alert severity="success">{successMsg}</Alert>}
 
-    <TextField
-      label="Username"
-      name="username"
-      value={formData.username}
-      onChange={handleChange}
-      fullWidth
-      required
-    />
-    <TextField
-      label="Email"
-      name="email"
-      type="email"
-      value={formData.email}
-      onChange={handleChange}
-      fullWidth
-      required
-    />
-    <TextField
-      label="Password"
-      name="password"
-      type="password"
-      value={formData.password}
-      onChange={handleChange}
-      fullWidth
-      required
-    />
-    <TextField
-      label="Confirm Password"
-      name="confirmPassword"
-      type="password"
-      value={formData.confirmPassword}
-      onChange={handleChange}
-      fullWidth
-      required
-    />
+      <input
+        type="text"
+        name="username"
+        placeholder="Username"
+        value={formData.username}
+        onChange={handleChange}
+        className="login-input"
+      />
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        value={formData.email}
+        onChange={handleChange}
+        className="login-input"
+      />
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        value={formData.password}
+        onChange={handleChange}
+        className="login-input"
+      />
+      <input
+        type="password"
+        name="confirmPassword"
+        placeholder="Confirm Password"
+        value={formData.confirmPassword}
+        onChange={handleChange}
+        className="login-input"
+      />
 
-    <Button type="submit" variant="contained" disabled={loading}>
-      {loading ? <CircularProgress size={24} color="inherit" /> : "Register"}
-    </Button>
-
-    <Link to ="/Login">
-    <Button
-      variant="text"
-      onClick={() => {
-      }}
-    >
-    i'm already a member
-    </Button></Link>
-  </Box>
-);
+      <div className="login-buttons">
+        <button type="submit" className="login-btn login" disabled={loading}>
+          {loading ? (
+            <CircularProgress size={20} color="inherit" />
+          ) : (
+            "Register"
+          )}
+        </button>
+        <Link to="/login">
+          <button type="button" className="login-btn cancel">
+            I'm already a member
+          </button>
+        </Link>
+      </div>
+    </Box>
+  );
 };
 
 export default Register;
