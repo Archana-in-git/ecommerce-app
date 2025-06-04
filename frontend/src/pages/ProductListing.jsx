@@ -142,7 +142,7 @@ const ProductListing = () => {
                   <Button
                     size="small"
                     component={Link}
-                    to={`/product/${product._id}`}
+                    to={`/products/${product._id}`}
                     sx={{ textTransform: "none" }}
                   >
                     View Details

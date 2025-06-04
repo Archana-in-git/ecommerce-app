@@ -1,6 +1,7 @@
 import React from "react";
 import { useCart } from "../context/CartContext";
 import { Card, CardContent, Typography, Button, Grid } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
   const { cartItems, removeFromCart, clearCart } = useCart();
@@ -86,6 +87,15 @@ const Cart = () => {
         sx={{ marginTop: 2 }}
       >
         Clear Cart
+      </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{ marginTop: 2 }}
+        component={Link}
+        to="/checkout"
+      >
+        Proceed to Checkout
       </Button>
     </div>
   );
