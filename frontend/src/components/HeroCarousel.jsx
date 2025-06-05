@@ -2,25 +2,28 @@ import React from "react";
 import Slider from "react-slick";
 import { Box, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import banner1 from "../assets/banners/banner1.png";
+import banner2 from "../assets/banners/banner2.webp";
+import banner3 from "../assets/banners/banner3.webp";
 
 // 🖼️ Hero banners
 const heroBanners = [
   {
     title: "Unbeatable Smartphone Deals",
     subtitle: "Get the latest models at lowest prices!",
-    image: "/assets/banners/banner1.jpg", // You can use public folder or cloud images
+    image: banner1,
     cta: "Shop Now",
   },
   {
     title: "Flagship Phones on Sale",
     subtitle: "Up to 25% off on Samsung, Apple, OnePlus",
-    image: "/assets/banners/banner2.jpg",
+    image: banner2,
     cta: "View Offers",
   },
   {
     title: "Budget Phones Bonanza",
     subtitle: "Stylish, powerful, and affordable",
-    image: "/assets/banners/banner3.jpg",
+    image: banner3,
     cta: "Browse Collection",
   },
 ];

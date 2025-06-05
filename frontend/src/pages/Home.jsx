@@ -81,37 +81,6 @@ const Home = () => {
 
       <Container maxWidth="lg" sx={{ mt: 5 }}>
         {/* 🔍 Search & Filter */}
-        <Grid container spacing={2} alignItems="center" sx={{ mb: 4 }}>
-          <Grid item xs={12} sm={8}>
-            <TextField
-              fullWidth
-              placeholder="Search by name or brand..."
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-              // Optional: add onChange to search filter
-            />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              fullWidth
-              select
-              label="Filter by Brand"
-              value={filteredBrand}
-              onChange={(e) => setFilteredBrand(e.target.value)}
-            >
-              {brandOptions.map((brand) => (
-                <MenuItem key={brand} value={brand}>
-                  {brand}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Grid>
-        </Grid>
         {!loading && <FlashSaleSection products={products} />}
 
         {/* 🛍️ Featured Products */}
@@ -120,10 +89,19 @@ const Home = () => {
         )}
 
         <Box sx={{ mt: 8 }}>
-          <Typography variant="h5" gutterBottom>
+          <Typography
+            variant="h5"
+            gutterBottom
+            sx={{
+              color: "#00ff88",
+              textShadow: "0 0 10px #00ff88",
+              fontWeight: "bold",
+              mb: 3,
+            }}
+          >
             Explore by Category
           </Typography>
-          <Grid container spacing={2}>
+          <Grid container spacing={3}>
             {["Budget", "Flagship", "Gaming"].map((category, index) => (
               <Grid item xs={12} sm={4} key={category}>
                 <motion.div
@@ -132,11 +110,29 @@ const Home = () => {
                   transition={{ delay: index * 0.2, duration: 0.5 }}
                 >
                   <Card
-                    sx={{ p: 3, textAlign: "center", cursor: "pointer" }}
                     onClick={() => navigate("/products")}
+                    sx={{
+                      p: 4,
+                      textAlign: "center",
+                      cursor: "pointer",
+                      backgroundColor: "#1a1a1a",
+                      color: "#00ff88",
+                      borderRadius: 3,
+                      boxShadow: "0 0 25px rgba(0, 255, 100, 0.5)",
+                      transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                      "&:hover": {
+                        transform: "scale(1.05)",
+                        boxShadow: "0 0 40px rgba(0, 255, 100, 0.8)",
+                      },
+                    }}
                   >
-                    <Typography variant="h6">{category} Phones</Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                      {category} Phones
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "#ffffffcc", mt: 1 }}
+                    >
                       Top models curated for this category
                     </Typography>
                   </Card>
@@ -160,6 +156,16 @@ const Home = () => {
               variant="contained"
               size="large"
               onClick={() => navigate("/products")}
+              sx={{
+                backgroundColor: "#68cb3a",
+                color: "#fff",
+                fontWeight: "bold",
+                borderRadius: "8px",
+                px: 4,
+                "&:hover": {
+                  backgroundColor: "#5ab332",
+                },
+              }}
             >
               View All Products
             </Button>

@@ -131,10 +131,19 @@ const ProductListing = () => {
                   <Typography variant="body2" color="text.secondary">
                     {product.brand}
                   </Typography>
-                  <Typography variant="subtitle1" fontWeight="bold" mt={1}>
-                    ₹{product.price}
-                  </Typography>
+
+                  {/* Price display */}
+                  {product.variants && product.variants.length > 0 ? (
+                    <Typography variant="subtitle1" fontWeight="bold" mt={1}>
+                      ₹{product.variants[0].price}
+                    </Typography>
+                  ) : (
+                    <Typography variant="subtitle1" fontWeight="bold" mt={1}>
+                      N/A
+                    </Typography>
+                  )}
                 </CardContent>
+
                 <CardActions sx={{ justifyContent: "space-between", px: 2 }}>
                   <IconButton color="primary" component={Link} to="/cart">
                     <ShoppingCart />

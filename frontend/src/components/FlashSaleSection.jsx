@@ -19,7 +19,6 @@ const FlashSaleSection = ({ products }) => {
   const flashSaleItems = products.filter((p) => p.isOnSale);
   const [timeLeft, setTimeLeft] = useState({});
 
-  // Countdown timer
   useEffect(() => {
     const interval = setInterval(() => {
       const updatedTimes = {};
@@ -49,7 +48,6 @@ const FlashSaleSection = ({ products }) => {
   }, [flashSaleItems]);
 
   if (products.length === 0) {
-    // Show 3 loading skeletons
     return (
       <Box sx={{ mt: 8 }}>
         <Typography variant="h5" gutterBottom color="error">
@@ -58,14 +56,7 @@ const FlashSaleSection = ({ products }) => {
         <Grid container spacing={3}>
           {Array.from({ length: 3 }).map((_, i) => (
             <Grid item xs={12} sm={6} md={4} key={`skeleton-${i}`}>
-              <Card
-                sx={{
-                  p: 2,
-                  backgroundColor: "var(--dark-bg-alt)",
-                  borderRadius: "var(--border-radius)",
-                  boxShadow: "var(--shadow-soft)",
-                }}
-              >
+              <Card sx={{ p: 2, backgroundColor: "#f5f5f5", borderRadius: 3 }}>
                 <Skeleton variant="rectangular" height={200} />
                 <CardContent>
                   <Skeleton width="80%" height={24} sx={{ mb: 1 }} />
@@ -100,28 +91,28 @@ const FlashSaleSection = ({ products }) => {
             >
               <Card
                 sx={{
-                  p: 2,
-                  backgroundColor: "var(--dark-bg-alt)",
-                  color: "var(--text-color)",
-                  borderRadius: "var(--border-radius)",
-                  boxShadow: "var(--shadow-soft)",
-                  position: "relative",
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  borderRadius: 3,
+                  boxShadow: 3,
                   overflow: "hidden",
                 }}
               >
                 <Box sx={{ position: "relative" }}>
                   <CardMedia
                     component="img"
-                    height="200"
                     image={item.imageUrls?.[0]}
                     alt={item.name}
                     sx={{
+                      height: 200, // fixed height like FeaturedCarousel
+                      width: "100%",
                       objectFit: "contain",
-                      backgroundColor: "#2a2e36",
+                      backgroundColor: "#f0f0f0",
                       p: 1,
                     }}
                   />
-                  {/* Gradient overlay */}
                   <Box
                     sx={{
                       position: "absolute",
@@ -135,9 +126,9 @@ const FlashSaleSection = ({ products }) => {
                   />
                 </Box>
 
-                <CardContent>
+                <CardContent sx={{ flexGrow: 1 }}>
                   <Typography variant="h6">{item.name}</Typography>
-                  <Typography variant="body2" sx={{ color: "#bbb" }}>
+                  <Typography variant="body2" color="text.secondary">
                     {item.brand}
                   </Typography>
 

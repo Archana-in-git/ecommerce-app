@@ -50,7 +50,8 @@ const FeaturedCarousel = ({ products }) => {
       { breakpoint: 600, settings: { slidesToShow: 1 } },
     ],
   };
-
+  const filteredProducts =
+    products.length >= 4 ? [products[0], products[2], products[3]] : products;
   const renderSkeletonCard = (_, i) => (
     <Box key={`skeleton-${i}`} p={1}>
       <Card
@@ -84,9 +85,9 @@ const FeaturedCarousel = ({ products }) => {
       </Typography>
 
       <Slider {...settings}>
-        {products.length === 0
+        {filteredProducts.length === 0
           ? Array.from({ length: 3 }).map(renderSkeletonCard)
-          : products.map((product) => {
+          : filteredProducts.map((product) => {
               const timeLeft = timers[product._id];
               const hours = Math.floor((timeLeft || 0) / (1000 * 60 * 60));
               const minutes = Math.floor(
@@ -95,7 +96,6 @@ const FeaturedCarousel = ({ products }) => {
               const seconds = Math.floor(
                 ((timeLeft || 0) % (1000 * 60)) / 1000
               );
-
               return (
                 <Box key={product._id} p={1}>
                   <Card
@@ -111,15 +111,17 @@ const FeaturedCarousel = ({ products }) => {
                     <Box sx={{ position: "relative" }}>
                       <CardMedia
                         component="img"
-                        height="180"
                         image={product.imageUrls?.[0]}
                         alt={product.name}
                         sx={{
-                          objectFit: "contain",
-                          backgroundColor: "#2a2e36",
+                          height: 200, // 🔧 Fixes image height
+                          width: "100%", // 🔧 Ensures full card width
+                          objectFit: "contain", // 🔧 Prevents distortion
+                          backgroundColor: "#e0e0e0", // Light backdrop
                           p: 1,
                         }}
                       />
+
                       {/* Gradient Overlay */}
                       <Box
                         sx={{
