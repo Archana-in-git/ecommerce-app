@@ -25,7 +25,6 @@ body {
   height: 100%;
   font-family: var(--font-sans);
   background-color: var(--dark-bg);
-  color: var(--text-color);
   scroll-behavior: smooth;
 }
 
@@ -48,7 +47,6 @@ h4,
 h5,
 h6 {
   font-weight: 600;
-  color: var(--text-color);
 }
 
 p {
@@ -138,4 +136,7 @@ select:focus {
 ::selection {
   background-color: var(--primary-color);
   color: #fff;
+}
+.product-card {
+  color: black;
 }

@@ -2,7 +2,7 @@ import React from "react";
 import Slider from "react-slick";
 import { Card, CardContent, Typography } from "@mui/material";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom"; // ✅ ADD THIS
+import { Link } from "react-router-dom";
 
 const ProductCard = ({ product }) => {
   const settings = {
@@ -20,13 +20,25 @@ const ProductCard = ({ product }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
+      style={{
+        display: "inline-block",
+        transformOrigin: "top left",
+        scale: 0.91,
+      }}
     >
-      {/* ✅ Wrap Card in Link */}
       <Link
         to={`/product/${product._id}`}
         style={{ textDecoration: "none", color: "inherit" }}
       >
-        <Card sx={{ maxWidth: 345, borderRadius: 4 }}>
+        <Card
+          className="product-card"
+          sx={{
+            maxWidth: 280, // control max width here
+            borderRadius: "12px",
+            overflow: "hidden",
+            boxShadow: 3,
+          }}
+        >
           <Slider {...settings}>
             {(product.imageUrls || []).map((url, idx) => (
               <div key={idx}>
@@ -35,26 +47,38 @@ const ProductCard = ({ product }) => {
                   alt={`${product.name} image ${idx + 1}`}
                   style={{
                     width: "100%",
-                    height: "200px",
+                    height: "180px", // reduced from 200px
                     objectFit: "cover",
-                    borderTopLeftRadius: "16px",
-                    borderTopRightRadius: "16px",
+                    borderTopLeftRadius: "12px",
+                    borderTopRightRadius: "12px",
                   }}
                 />
               </div>
             ))}
           </Slider>
-          <CardContent>
-            <Typography gutterBottom variant="h6" component="div">
+          <CardContent sx={{ paddingBottom: 2 }}>
+            <Typography
+              gutterBottom
+              variant="h6"
+              component="div"
+              noWrap
+              sx={{ color: "black" }} // ✅ force black text
+            >
               {product.name}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+
+            <Typography
+              variant="body2"
+              noWrap
+              sx={{ color: "black" }} // ✅ force black text
+            >
               {product.brand}
             </Typography>
+
             <Typography
               variant="subtitle1"
-              color="text.primary"
               fontWeight={600}
+              sx={{ color: "black" }} // ✅ force black text
             >
               ₹{product.variants?.[0]?.price}
             </Typography>

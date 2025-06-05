@@ -11,6 +11,7 @@ import {
   Select,
   FormControl,
   InputLabel,
+  Box,
 } from "@mui/material";
 import "../styles/productDetails.css";
 import { useCart } from "../context/CartContext";
@@ -25,46 +26,47 @@ function ProductDetails() {
     getProductById(id)
       .then((data) => {
         setProduct(data);
-        if (data.variants && data.variants.length > 0) {
+        if (data.variants?.length > 0) {
           setSelectedVariant(data.variants[0]);
         }
       })
       .catch(console.error);
   }, [id]);
 
-  if (!product) return <div className="loading">Loading...</div>;
-
   const handleVariantChange = (e) => {
     const variant = product.variants.find((v) => v.storage === e.target.value);
     setSelectedVariant(variant);
   };
 
+  if (!product) return <div className="loading">Loading...</div>;
+
   return (
     <div className="product-details-container">
-      <Grid container spacing={4}>
+      <Grid container spacing={4} alignItems="flex-start">
+        {/* Product Image */}
         <Grid item xs={12} md={5}>
-          <img
-            src={product.imageUrls?.[0]}
-            alt={product.name}
-            className="product-image"
-          />
+          <Box className="product-image-wrapper">
+            <img
+              src={product.imageUrls?.[0]}
+              alt={product.name}
+              className="product-image"
+            />
+          </Box>
         </Grid>
 
+        {/* Product Info */}
         <Grid item xs={12} md={7}>
-          <Card className="product-card">
-            <CardContent
-              className="< className="
-              product-details-card
-              light-card
-            >
-              <Typography variant="h5" className="product-title">
+          <Card className="product-card light-card">
+            <CardContent>
+              <Typography variant="h4" className="product-title" gutterBottom>
                 {product.name}
               </Typography>
+
               <Typography variant="subtitle1" className="product-brand">
                 Brand: {product.brand}
               </Typography>
 
-              <div className="specs">
+              <Box className="specs">
                 <Typography variant="body2">
                   Display: {product.display}
                 </Typography>
@@ -85,7 +87,7 @@ function ProductDetails() {
                 <Typography variant="body2">
                   Weight: {product.weight}
                 </Typography>
-              </div>
+              </Box>
 
               {product.variants?.length > 0 && (
                 <FormControl fullWidth margin="normal" size="small">

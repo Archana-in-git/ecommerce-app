@@ -50,8 +50,10 @@ const FeaturedCarousel = ({ products }) => {
       { breakpoint: 600, settings: { slidesToShow: 1 } },
     ],
   };
+
   const filteredProducts =
     products.length >= 4 ? [products[0], products[2], products[3]] : products;
+
   const renderSkeletonCard = (_, i) => (
     <Box key={`skeleton-${i}`} p={1}>
       <Card
@@ -96,6 +98,9 @@ const FeaturedCarousel = ({ products }) => {
               const seconds = Math.floor(
                 ((timeLeft || 0) % (1000 * 60)) / 1000
               );
+
+              const basePrice = product.variants?.[0]?.price ?? "N/A";
+
               return (
                 <Box key={product._id} p={1}>
                   <Card
@@ -114,15 +119,13 @@ const FeaturedCarousel = ({ products }) => {
                         image={product.imageUrls?.[0]}
                         alt={product.name}
                         sx={{
-                          height: 200, // 🔧 Fixes image height
-                          width: "100%", // 🔧 Ensures full card width
-                          objectFit: "contain", // 🔧 Prevents distortion
-                          backgroundColor: "#e0e0e0", // Light backdrop
+                          height: 200,
+                          width: "100%",
+                          objectFit: "contain",
+                          backgroundColor: "#e0e0e0",
                           p: 1,
                         }}
                       />
-
-                      {/* Gradient Overlay */}
                       <Box
                         sx={{
                           position: "absolute",
@@ -150,20 +153,17 @@ const FeaturedCarousel = ({ products }) => {
                               component="span"
                               sx={{ textDecoration: "line-through", mr: 1 }}
                             >
-                              ₹{product.price}
+                              ₹{basePrice}
                             </Typography>
                             <Typography
                               component="span"
-                              sx={{
-                                color: "#ff5252",
-                                fontWeight: "bold",
-                              }}
+                              sx={{ color: "#ff5252", fontWeight: "bold" }}
                             >
-                              ₹{product.salePrice}
+                              ₹{product.salePrice ?? "N/A"}
                             </Typography>
                           </>
                         ) : (
-                          <>₹{product.price}</>
+                          <>₹{basePrice}</>
                         )}
                       </Typography>
 
@@ -205,9 +205,7 @@ const FeaturedCarousel = ({ products }) => {
                             backgroundColor: "var(--primary-color)",
                             color: "#fff",
                             textTransform: "none",
-                            ":hover": {
-                              backgroundColor: "#5aa246",
-                            },
+                            ":hover": { backgroundColor: "#5aa246" },
                           }}
                           onClick={() => {
                             if (product.isOnSale) {
