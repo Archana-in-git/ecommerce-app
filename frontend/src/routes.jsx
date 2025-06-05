@@ -18,6 +18,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import OrderPage from "./pages/OrderPage";
 import AdminProducts from "./pages/AdminProducts";
 import AdminOrders from "./pages/AdminOrders";
+import AdminAddProduct from "./pages/AdminAddProduct";
+
 
 const AppRoutes = () => {
   const { user } = useAuth();
@@ -66,6 +68,8 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+      <Route path="/admin/add-product" element={<AdminAddProduct/>} />
+
       <Route path="/order/:id" element={<OrderPage />} />
 
     </Routes>
