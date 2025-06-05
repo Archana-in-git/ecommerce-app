@@ -1,6 +1,8 @@
 // src/routes.jsx
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
+
 import Home from "./pages/Home";
 import ProductListing from "./pages/ProductListing";
 import ProductDetails from "./pages/ProductDetails";
@@ -14,8 +16,12 @@ import NotFound from "./pages/NotFound";
 import OutOfStock from "./pages/OutOfStock";
 import ProtectedRoute from "./components/ProtectedRoute";
 import OrderPage from "./pages/OrderPage";
+import AdminProducts from "./pages/AdminProducts";
+import AdminOrders from "./pages/AdminOrders";
 
 const AppRoutes = () => {
+  const { user } = useAuth();
+
   return (
     <Routes>
       <Route path="/" element={<Home />} />
@@ -27,6 +33,7 @@ const AppRoutes = () => {
       <Route path="/register" element={<Register />} />
       <Route path="*" element={<NotFound />} />
       <Route path="/outofstock" element={<OutOfStock />} />
+
       <Route
         path="/profile"
         element={
@@ -38,12 +45,29 @@ const AppRoutes = () => {
       <Route
         path="/admin"
         element={
-          <ProtectedRoute adminOnly>
+          <ProtectedRoute admin>
             <AdminDashboard />
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/admin/products"
+        element={
+          <ProtectedRoute admin>
+            <AdminProducts />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/orders"
+        element={
+          <ProtectedRoute admin>
+            <AdminOrders />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/order/:id" element={<OrderPage />} />
+
     </Routes>
   );
 };

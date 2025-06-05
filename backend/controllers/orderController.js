@@ -118,3 +118,29 @@ export const cancelOrder = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// Get all orders (Admin only)
+export const getAllOrdersForAdmin = async (req, res) => {
+  try {
+    const orders = await Order.find().populate("user", "name email");
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Delete an order (Admin only)
+export const deleteOrder = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    await order.remove();
+    res.json({ message: "Order deleted" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

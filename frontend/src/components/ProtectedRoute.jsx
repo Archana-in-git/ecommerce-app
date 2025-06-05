@@ -1,19 +1,15 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-const ProtectedRoute = ({ children, role }) => {
+const ProtectedRoute = ({ children, admin = false }) => {
   const { isAuthenticated, user } = useAuth();
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" />;
-  }
-
-  if (role && user?.role !== role) {
-    return <Navigate to="/" />; // or show "403 Forbidden" page
-  }
-
+  if (!isAuthenticated) return <Navigate to="/login" />;
+  if (admin && user?.role !== "admin") return <Navigate to="/" />;
+  
   return children;
 };
+
 
 export default ProtectedRoute;
 
