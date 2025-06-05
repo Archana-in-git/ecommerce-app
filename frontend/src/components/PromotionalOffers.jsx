@@ -16,13 +16,13 @@ const promoData = [
     title: "🔥 Google Pixel 9 Pro at ₹5,000 Off",
     description: "Only today! Unleash AI-powered performance.",
     deadline: "2025-06-10T23:59:59",
-    productId: "683ace69233ea37ae38fb1bc", // Google Pixel 9 Pro
+    productId: "683ace69233ea37ae38fb1bc",
   },
   {
     title: "⚡ OnePlus 13R Deal",
     description: "Flat ₹3,000 discount with exchange bonus.",
     deadline: "2025-06-12T23:59:59",
-    productId: "683acec9233ea37ae38fb1bf", // OnePlus 13R
+    productId: "683acec9233ea37ae38fb1bf",
   },
   {
     title: "🎁 Special Offer Coming Soon",
@@ -51,43 +51,85 @@ const PromotionalOffers = () => {
 
   return (
     <Box sx={{ mt: 8 }}>
-      <Typography variant="h5" gutterBottom>
+      <Typography
+        variant="h5"
+        gutterBottom
+        sx={{
+          fontWeight: "700",
+          mb: 3,
+          color: "#6dbd50",
+          textAlign: "center",
+          textTransform: "uppercase",
+          letterSpacing: 1.5,
+        }}
+      >
         🎁 Limited-Time Offers
       </Typography>
-      <Grid container spacing={3}>
+
+      <Grid container spacing={4}>
         {promoData.map((offer, index) => (
           <Grid item xs={12} md={4} key={index}>
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.2, duration: 0.5 }}
+              transition={{ delay: index * 0.15, duration: 0.5 }}
             >
-              <Card sx={{ p: 2, border: "2px solid #1976d2" }}>
+              <Card
+                sx={{
+                  p: 3,
+                  borderRadius: 3,
+                  backgroundColor: "#1a1a1a",
+                  border: "2px solid #6dbd50",
+                  cursor: "pointer",
+                  transition: "transform 0.3s ease",
+                  "&:hover": {
+                    transform: "translateY(-6px)",
+                    borderColor: "#00e676",
+                  },
+                }}
+              >
                 <CardContent>
-                  <Typography variant="h6" fontWeight="bold">
+                  <Typography
+                    variant="h6"
+                    fontWeight="700"
+                    gutterBottom
+                    sx={{
+                      color: "#00ff88",
+                    }}
+                  >
                     {offer.title}
                   </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ mb: 1 }}
-                  >
+
+                  <Typography variant="body2" color="#cfcfcf" sx={{ mb: 2 }}>
                     {offer.description}
                   </Typography>
+
                   <Typography
                     variant="caption"
                     display="flex"
                     alignItems="center"
-                    color="error"
-                    sx={{ mb: 2 }}
+                    color="#ff5252"
+                    sx={{ mb: 3, fontWeight: 600 }}
                   >
-                    <AccessTimeIcon fontSize="small" sx={{ mr: 0.5 }} />
+                    <AccessTimeIcon fontSize="small" sx={{ mr: 0.7 }} />
                     {getCountdown(offer.deadline)}
                   </Typography>
+
                   <Button
                     variant="contained"
-                    size="small"
+                    fullWidth
+                    size="medium"
                     onClick={() => navigate(`/product/${offer.productId}`)}
+                    sx={{
+                      backgroundColor: "#6dbd50",
+                      color: "#000",
+                      fontWeight: "700",
+                      textTransform: "none",
+                      borderRadius: 2,
+                      "&:hover": {
+                        backgroundColor: "#00e676",
+                      },
+                    }}
                   >
                     Shop Now
                   </Button>

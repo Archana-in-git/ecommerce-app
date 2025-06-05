@@ -82,3 +82,20 @@
   color: #ffffff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
 }
+/* Updated drawer background and hover */
+.MuiDrawer-paper {
+  background: linear-gradient(180deg, #1c1f26 0%, #101215 100%) !important;
+  color: #ffffff;
+  border-left: 2px solid #68cb3a;
+}
+
+.MuiListItem-root:hover {
+  background-color: rgba(104, 203, 58, 0.08);
+  transition: background-color 0.2s ease;
+}
+
+.MuiListItemText-primary {
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+}

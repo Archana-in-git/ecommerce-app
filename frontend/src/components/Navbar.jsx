@@ -95,7 +95,19 @@ export default function Navbar() {
       </Toolbar>
 
       {/* Drawer for mobile */}
-      <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
+      <Drawer
+        anchor="right"
+        open={drawerOpen}
+        onClose={toggleDrawer(false)}
+        PaperProps={{
+          sx: {
+            background: "linear-gradient(180deg, #1c1f26 0%, #101215 100%)",
+            color: "#ffffff",
+            width: 240,
+            borderLeft: "2px solid #68cb3a",
+          },
+        }}
+      >
         <Box role="presentation" onClick={toggleDrawer(false)}>
           <List>
             {(user ? userLinks : guestLinks).map((link) => (
