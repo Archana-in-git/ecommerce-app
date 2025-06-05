@@ -11,7 +11,7 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: "Email already in use" });
     }
 
-    const user = new User({ username, email, password, role });
+    const user = new User({ username, email, password, role }); // plain password
     await user.save();
 
     res.status(201).json({ message: "User registered successfully" });
@@ -23,11 +23,19 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log("Login attempt:", email, "Password entered:", password);
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "Invalid credentials" });
+    if (!user) {
+      console.log("User not found");
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    console.log("User found, hashed password in DB:", user.password);
 
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log("Password match:", isMatch);
+
     if (!isMatch)
       return res.status(400).json({ message: "Invalid credentials" });
 
@@ -41,10 +49,11 @@ export const loginUser = async (req, res) => {
         id: user._id,
         username: user.username,
         email: user.email,
-        role: user.role, // ✅ include role
+        role: user.role,
       },
     });
   } catch (err) {
+    console.error("Error during login:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
