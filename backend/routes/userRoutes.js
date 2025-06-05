@@ -5,6 +5,8 @@ import {
   updateUserProfile,
 } from "../controllers/userController.js";
 import Newsletter from "../models/Newsletter.js";
+import upload from "../middleware/upload.js";
+import User from "../models/User.js";
 
 const router = express.Router();
 
@@ -31,5 +33,35 @@ router.post("/newsletter/signup", async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
+
+// Upload profile picture route
+router.post(
+  "/profile/upload",
+  protect,
+  upload.single("profilePicture"),
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+
+      const user = await User.findById(req.user._id);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      user.profilePicture = `/uploads/${req.file.filename}`;
+      await user.save();
+
+      res.json({
+        message: "Profile picture uploaded",
+        imageUrl: user.profilePicture,
+      });
+    } catch (error) {
+      console.error("Upload route error:", error); // <== ADD THIS
+      res.status(500).json({ message: "Server error", error: error.message });
+    }
+  }
+);
 
 export default router;
