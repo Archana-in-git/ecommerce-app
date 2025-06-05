@@ -1,8 +1,19 @@
+// src/services/api.js
+
 import axios from "axios";
 
-const instance = axios.create({
+const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api",
   withCredentials: true,
 });
 
-export default instance; // ✅ Add this line
+// Attach token to request headers
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token"); // or wherever you store your JWT
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+export default api;

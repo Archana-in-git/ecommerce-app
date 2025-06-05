@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Avatar, Box, Button, TextField, Typography } from "@mui/material";
 import { getUserProfile, updateUserProfile } from "../services/userService";
+import axios from "../services/api"; // or wherever your axios instance is
 
-const UserProfile = () => {
+const Profile = () => {
   const [profile, setProfile] = useState({
     username: "",
     email: "",
@@ -10,6 +11,8 @@ const UserProfile = () => {
     address: "",
     profilePicture: "",
   });
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function fetchProfile() {
@@ -25,6 +28,7 @@ const UserProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await updateUserProfile(profile);
       alert("Profile updated successfully!");
@@ -32,99 +36,276 @@ const UserProfile = () => {
       console.error("Failed to update profile", error);
       alert("Failed to update profile");
     }
+    setLoading(false);
   };
 
   const handleChange = (e) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
   };
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setProfile({ ...profile, profilePicture: imageUrl });
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("profilePicture", file);
+
+    try {
+      setLoading(true);
+      // Assuming your backend upload endpoint is /api/users/profile/upload
+      const response = await axios.post("/users/profile/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true, // important for cookies/auth
+      });
+
+      // The backend should respond with something like { imageUrl: "/uploads/filename.jpg" }
+      const imageUrl = response.data.imageUrl;
+
+      setProfile((prev) => ({ ...prev, profilePicture: imageUrl }));
+    } catch (error) {
+      console.error("Failed to upload image", error);
+      alert("Image upload failed");
+    } finally {
+      setLoading(false);
     }
   };
+
+  // Use your CSS variable or hardcode your dark background color here:
+  const darkBgAlt = "rgb(20, 20, 30)"; // fallback for var(--dark-bg-alt)
 
   return (
     <Box
       sx={{
-        maxWidth: 500,
+        maxWidth: 420,
+        width: "90%",
         mx: "auto",
-        mt: 5,
-        p: 3,
-        boxShadow: 3,
-        borderRadius: 2,
-        backgroundColor: "#fff",
+        mt: 8,
+        p: "2.5rem 2rem",
+        backgroundColor: "var(--dark-bg-alt, " + darkBgAlt + ")",
+        borderRadius: "12px",
+        boxShadow: "0 0 20px rgba(45, 237, 45, 0.973)",
+        color: "#fff",
+        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
       }}
     >
-      <Typography variant="h5" gutterBottom>
+      <Typography
+        className="login-title"
+        variant="h4"
+        component="h1"
+        sx={{
+          textAlign: "center",
+          fontSize: "2rem",
+          mb: "1.5rem",
+          fontWeight: 600,
+          color: "#fff",
+        }}
+      >
         User Profile
       </Typography>
 
-      {/* Avatar and image upload */}
-      <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 1,
+        }}
+      >
         <Avatar
           src={profile.profilePicture}
-          sx={{ width: 80, height: 80, mr: 2 }}
+          alt={profile.username || "User Avatar"}
+          sx={{ width: 80, height: 80 }}
         />
-        <Button variant="outlined" component="label">
-          Upload Picture
+
+        <label htmlFor="profile-upload">
           <input
             type="file"
-            hidden
+            id="profile-upload"
             accept="image/*"
+            hidden
             onChange={handleImageUpload}
           />
-        </Button>
+          <Button
+            variant="outlined"
+            component="span"
+            sx={{
+              color: "#00ff7f",
+              borderColor: "#00ff7f",
+              borderRadius: "8px",
+              fontWeight: 600,
+              "&:hover": {
+                backgroundColor: "#00ff7f",
+                color: "#000",
+                borderColor: "#00ff7f",
+              },
+            }}
+          >
+            Upload Picture
+          </Button>
+        </label>
       </Box>
 
-      {/* Form */}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} noValidate>
+        {/** TextField style matching `.login-input` */}
         <TextField
           label="Name"
-          name="name"
-          fullWidth
-          margin="normal"
-          value={profile.name}
+          name="username"
+          value={profile.username}
           onChange={handleChange}
           required
+          fullWidth
+          margin="normal"
+          variant="filled"
+          InputProps={{
+            sx: {
+              backgroundColor: "#2c2c3c",
+              borderRadius: "8px",
+              color: "#fff",
+              "& .MuiInputBase-input": {
+                color: "#fff",
+              },
+              "& .MuiInputLabel-root": {
+                color: "#aaa",
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                color: "#00ff7f",
+              },
+              "& .MuiFilledInput-root:before": {
+                borderBottom: "none",
+              },
+              "& .MuiFilledInput-root:hover:not(.Mui-disabled):before": {
+                borderBottom: "none",
+              },
+            },
+          }}
         />
+
         <TextField
           label="Email"
           name="email"
           type="email"
-          fullWidth
-          margin="normal"
           value={profile.email}
           onChange={handleChange}
           required
+          fullWidth
+          margin="normal"
+          variant="filled"
+          InputProps={{
+            sx: {
+              backgroundColor: "#2c2c3c",
+              borderRadius: "8px",
+              color: "#fff",
+              "& .MuiInputBase-input": {
+                color: "#fff",
+              },
+              "& .MuiInputLabel-root": {
+                color: "#aaa",
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                color: "#00ff7f",
+              },
+              "& .MuiFilledInput-root:before": {
+                borderBottom: "none",
+              },
+              "& .MuiFilledInput-root:hover:not(.Mui-disabled):before": {
+                borderBottom: "none",
+              },
+            },
+          }}
         />
+
         <TextField
           label="Phone"
           name="phone"
-          fullWidth
-          margin="normal"
           value={profile.phone}
           onChange={handleChange}
+          fullWidth
+          margin="normal"
+          variant="filled"
+          InputProps={{
+            sx: {
+              backgroundColor: "#2c2c3c",
+              borderRadius: "8px",
+              color: "#fff",
+              "& .MuiInputBase-input": {
+                color: "#fff",
+              },
+              "& .MuiInputLabel-root": {
+                color: "#aaa",
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                color: "#00ff7f",
+              },
+              "& .MuiFilledInput-root:before": {
+                borderBottom: "none",
+              },
+              "& .MuiFilledInput-root:hover:not(.Mui-disabled):before": {
+                borderBottom: "none",
+              },
+            },
+          }}
         />
+
         <TextField
           label="Address"
           name="address"
+          value={profile.address}
+          onChange={handleChange}
           fullWidth
           margin="normal"
           multiline
-          rows={2}
-          value={profile.address}
-          onChange={handleChange}
+          rows={3}
+          variant="filled"
+          InputProps={{
+            sx: {
+              backgroundColor: "#2c2c3c",
+              borderRadius: "8px",
+              color: "#fff",
+              "& .MuiInputBase-input": {
+                color: "#fff",
+              },
+              "& .MuiInputLabel-root": {
+                color: "#aaa",
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                color: "#00ff7f",
+              },
+              "& .MuiFilledInput-root:before": {
+                borderBottom: "none",
+              },
+              "& .MuiFilledInput-root:hover:not(.Mui-disabled):before": {
+                borderBottom: "none",
+              },
+            },
+          }}
         />
 
-        <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
-          Save Profile
+        <Button
+          type="submit"
+          disabled={loading}
+          fullWidth
+          sx={{
+            mt: 2,
+            py: 1.1,
+            fontWeight: 600,
+            fontSize: "1rem",
+            borderRadius: "8px",
+            backgroundColor: "#007bff",
+            color: "#fff",
+            transition: "opacity 0.3s ease",
+            "&:hover": {
+              opacity: 0.9,
+              backgroundColor: "#0069d9",
+            },
+          }}
+        >
+          {loading ? "Saving..." : "Save Profile"}
         </Button>
       </form>
     </Box>
   );
 };
 
-export default UserProfile;
+export default Profile;

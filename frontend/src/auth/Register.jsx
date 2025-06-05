@@ -1,14 +1,8 @@
 import React, { useState } from "react";
-import {
-  TextField,
-  Button,
-  Typography,
-  CircularProgress,
-  Box,
-  Alert,
-} from "@mui/material";
+import { Typography, CircularProgress, Box, Alert } from "@mui/material";
 import { Link } from "react-router-dom";
 import "../styles/login.css"; // Ensure this file is imported
+import { register } from "../services/authService";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -48,16 +42,8 @@ const Register = () => {
     try {
       setLoading(true);
 
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Something went wrong.");
-
-      setSuccessMsg("Registration successful!");
+      const response = await register({ username, email, password });
+      setSuccessMsg(response.data.message || "Registration successful!");
       setFormData({
         username: "",
         email: "",
@@ -65,7 +51,7 @@ const Register = () => {
         confirmPassword: "",
       });
     } catch (error) {
-      setErrorMsg(error.message);
+      setErrorMsg(error.response?.data?.message || error.message);
     } finally {
       setLoading(false);
     }
