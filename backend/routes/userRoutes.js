@@ -1,8 +1,10 @@
 import express from "express";
-import { protect } from "../middleware/authMiddleware.js";
+import { protect, admin } from "../middleware/authMiddleware.js";
 import {
   getUserProfile,
   updateUserProfile,
+  getAllUsers,
+  updateUserStatus,
 } from "../controllers/userController.js";
 import Newsletter from "../models/Newsletter.js";
 import upload from "../middleware/upload.js";
@@ -63,5 +65,13 @@ router.post(
     }
   }
 );
+
+// User routes
+router.get("/profile", protect, getUserProfile);
+router.put("/profile", protect, updateUserProfile);
+
+// Admin routes
+router.get("/", protect, admin, getAllUsers);
+router.put("/:id/status", protect, admin, updateUserStatus);
 
 export default router;
