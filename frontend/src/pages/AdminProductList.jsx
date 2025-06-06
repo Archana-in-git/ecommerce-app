@@ -59,6 +59,13 @@ const AdminProductList = () => {
       <Typography variant="h4" gutterBottom sx={{ color: "white" }}>
         Admin Product List
       </Typography>
+      <Button
+      variant="contained"
+      color="primary"
+      onClick={() => navigate("/admin/products/add")}
+    >
+      Add Product
+    </Button>
 
       {loading ? (
         <Box display="flex" justifyContent="center" my={4}>
