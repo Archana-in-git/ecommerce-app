@@ -63,7 +63,7 @@ const AppRoutes = () => {
       />
 
       <Route
-        path="/admin/product/add"
+        path="/admin/products/add"
         element={
           <ProtectedRoute admin>
             <AdminAddProduct />
@@ -90,8 +90,14 @@ const AppRoutes = () => {
         }
       />
 
-<Route path="/admin/products/edit/:id" element={<ProtectedRoute admin><AdminEditProduct /></ProtectedRoute>} />
-
+      <Route
+        path="/admin/products/edit/:id"
+        element={
+          <ProtectedRoute admin>
+            <AdminEditProduct />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 };

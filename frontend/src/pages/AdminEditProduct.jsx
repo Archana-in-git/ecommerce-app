@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "../services/api"; // or adjust the path based on your axios instance
+import axios from "../services/api";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -40,28 +40,28 @@ const AdminEditProduct = () => {
     updatedVariants[0] = { ...updatedVariants[0], price: e.target.value };
     setProduct({ ...product, variants: updatedVariants });
   };
+
   const handleImageChange = async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+    const file = e.target.files[0];
+    if (!file) return;
 
-  const formData = new FormData();
-  formData.append("image", file);
+    const formData = new FormData();
+    formData.append("image", file);
 
-  try {
-    const { data } = await axios.post(`/products/${id}/upload`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      withCredentials: true,
-    });
+    try {
+      const { data } = await axios.post(`/products/${id}/upload`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      });
 
-    setProduct({ ...product, image: data.imageUrl }); // update state with uploaded image URL
-  } catch (err) {
-    console.error("Image upload failed", err);
-    alert("Image upload failed");
-  }
-};
-
+      setProduct({ ...product, image: data.imageUrl });
+    } catch (err) {
+      console.error("Image upload failed", err);
+      alert("Image upload failed");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -83,9 +83,19 @@ const AdminEditProduct = () => {
     );
   }
 
+  const whiteTextFieldStyle = {
+    input: { color: "white" },
+    "& label": { color: "white" },
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": { borderColor: "white" },
+      "&:hover fieldset": { borderColor: "white" },
+      "&.Mui-focused fieldset": { borderColor: "#1976d2" },
+    },
+  };
+
   return (
-    <Box maxWidth="600px" mx="auto" mt={5}>
-      <Typography variant="h5" gutterBottom>
+    <Box maxWidth="600px" mx="auto" mt={5} sx={{ color: "white" }}>
+      <Typography variant="h5" gutterBottom sx={{ color: "white" }}>
         Edit Product
       </Typography>
       <form onSubmit={handleSubmit}>
@@ -96,6 +106,7 @@ const AdminEditProduct = () => {
           value={product.name || ""}
           onChange={handleChange}
           margin="normal"
+          sx={whiteTextFieldStyle}
         />
         <TextField
           fullWidth
@@ -104,6 +115,7 @@ const AdminEditProduct = () => {
           value={product.brand || ""}
           onChange={handleChange}
           margin="normal"
+          sx={whiteTextFieldStyle}
         />
         <TextField
           fullWidth
@@ -112,6 +124,7 @@ const AdminEditProduct = () => {
           value={product.category || ""}
           onChange={handleChange}
           margin="normal"
+          sx={whiteTextFieldStyle}
         />
         <TextField
           fullWidth
@@ -121,27 +134,32 @@ const AdminEditProduct = () => {
           value={product.variants?.[0]?.price || ""}
           onChange={handleVariantChange}
           margin="normal"
+          sx={whiteTextFieldStyle}
         />
+
         {product.image && (
-  <Box my={2}>
-    <img
-      src={product.image}
-      alt="Product"
-      style={{ maxWidth: "150px", borderRadius: "8px", marginBottom: "8px" }}
-    />
-  </Box>
-)}
+          <Box my={2}>
+            <img
+              src={product.image}
+              alt="Product"
+              style={{
+                maxWidth: "150px",
+                borderRadius: "8px",
+                marginBottom: "8px",
+              }}
+            />
+          </Box>
+        )}
 
-<Button variant="outlined" component="label" sx={{ mb: 2 }}>
-  Change Image
-  <input
-    type="file"
-    hidden
-    accept="image/*"
-    onChange={handleImageChange}
-  />
-</Button>
-
+        <Button variant="outlined" component="label" sx={{ mb: 2 }}>
+          Change Image
+          <input
+            type="file"
+            hidden
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+        </Button>
 
         <Button
           type="submit"
@@ -157,4 +175,3 @@ const AdminEditProduct = () => {
 };
 
 export default AdminEditProduct;
-

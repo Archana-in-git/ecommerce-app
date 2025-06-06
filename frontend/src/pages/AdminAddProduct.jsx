@@ -8,7 +8,7 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
-import axios from "../services/api"; // adjust if your axios instance path differs
+import axios from "../services/api";
 import { addProduct } from "../services/productService";
 
 const AdminAddProduct = () => {
@@ -29,7 +29,10 @@ const AdminAddProduct = () => {
 
   const handleVariantChange = (e) => {
     const updatedVariants = [...product.variants];
-    updatedVariants[0] = { ...updatedVariants[0], [e.target.name]: e.target.value };
+    updatedVariants[0] = {
+      ...updatedVariants[0],
+      [e.target.name]: e.target.value,
+    };
     setProduct({ ...product, variants: updatedVariants });
   };
 
@@ -47,7 +50,6 @@ const AdminAddProduct = () => {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
-      // Add new image URL to array
       setProduct((prev) => ({
         ...prev,
         imageUrls: [...prev.imageUrls, data.imageUrl],
@@ -62,8 +64,6 @@ const AdminAddProduct = () => {
 
   const handleSubmit = async () => {
     setError(null);
-
-    // Optional: simple validation
     if (!product.name || !product.brand || !product.category) {
       setError("Please fill all required fields");
       return;
@@ -79,9 +79,20 @@ const AdminAddProduct = () => {
     }
   };
 
+  // Common style for white text inputs
+  const whiteTextFieldStyle = {
+    input: { color: "white" },
+    "& label": { color: "white" },
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": { borderColor: "white" },
+      "&:hover fieldset": { borderColor: "white" },
+      "&.Mui-focused fieldset": { borderColor: "#1976d2" }, // Optional blue focus
+    },
+  };
+
   return (
-    <Container maxWidth="sm" sx={{ mt: 5 }}>
-      <Typography variant="h5" gutterBottom>
+    <Container maxWidth="sm" sx={{ mt: 5, color: "white" }}>
+      <Typography variant="h5" gutterBottom sx={{ color: "white" }}>
         Add New Product
       </Typography>
 
@@ -98,6 +109,7 @@ const AdminAddProduct = () => {
           value={product.name}
           onChange={handleChange}
           required
+          sx={whiteTextFieldStyle}
         />
         <TextField
           label="Brand"
@@ -105,6 +117,7 @@ const AdminAddProduct = () => {
           value={product.brand}
           onChange={handleChange}
           required
+          sx={whiteTextFieldStyle}
         />
         <TextField
           label="Category"
@@ -112,18 +125,19 @@ const AdminAddProduct = () => {
           value={product.category}
           onChange={handleChange}
           required
+          sx={whiteTextFieldStyle}
         />
 
-        {/* Variant inputs */}
-        <Typography variant="subtitle1" mt={2}>
+        <Typography variant="subtitle1" mt={2} sx={{ color: "white" }}>
           Variant Details
         </Typography>
+
         <TextField
           label="Variant Name"
           name="variantName"
           value={product.variants[0].variantName}
           onChange={handleVariantChange}
-          placeholder="e.g. Size, Color"
+          sx={whiteTextFieldStyle}
         />
         <TextField
           label="Price"
@@ -131,6 +145,7 @@ const AdminAddProduct = () => {
           type="number"
           value={product.variants[0].price}
           onChange={handleVariantChange}
+          sx={whiteTextFieldStyle}
         />
         <TextField
           label="Stock"
@@ -138,6 +153,7 @@ const AdminAddProduct = () => {
           type="number"
           value={product.variants[0].stock}
           onChange={handleVariantChange}
+          sx={whiteTextFieldStyle}
         />
 
         {/* Image Upload */}
@@ -157,7 +173,12 @@ const AdminAddProduct = () => {
                 key={i}
                 src={url}
                 alt={`Uploaded ${i}`}
-                style={{ width: 80, height: 80, objectFit: "cover", borderRadius: 4 }}
+                style={{
+                  width: 80,
+                  height: 80,
+                  objectFit: "cover",
+                  borderRadius: 4,
+                }}
               />
             ))}
           </Box>
