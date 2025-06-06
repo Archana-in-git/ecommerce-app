@@ -37,7 +37,8 @@ const AdminProductList = () => {
   }, []);
 
   const handleDelete = async (productId) => {
-    if (!window.confirm("Are you sure you want to delete this product?")) return;
+    if (!window.confirm("Are you sure you want to delete this product?"))
+      return;
     try {
       setDeletingId(productId);
       await deleteProduct(productId);
@@ -50,8 +51,8 @@ const AdminProductList = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4 }}>
-      <Typography variant="h4" gutterBottom>
+    <Container maxWidth="lg" sx={{ mt: 4, color: "white" }}>
+      <Typography variant="h4" gutterBottom sx={{ color: "white" }}>
         Admin Product List
       </Typography>
 
@@ -63,22 +64,25 @@ const AdminProductList = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Brand</TableCell>
-              <TableCell>Category</TableCell>
-              <TableCell>Price</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell sx={{ color: "white" }}>Name</TableCell>
+              <TableCell sx={{ color: "white" }}>Brand</TableCell>
+              <TableCell sx={{ color: "white" }}>Category</TableCell>
+              <TableCell sx={{ color: "white" }}>Price</TableCell>
+              <TableCell sx={{ color: "white" }} align="right">
+                Actions
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {products.map((product) => (
               <TableRow key={product._id}>
-                <TableCell>{product.name}</TableCell>
-                <TableCell>{product.brand}</TableCell>
-                <TableCell>{product.category}</TableCell>
-                <TableCell>
-                  ₹
-                  {product.variants?.[0]?.price ?? "N/A"}
+                <TableCell sx={{ color: "white" }}>{product.name}</TableCell>
+                <TableCell sx={{ color: "white" }}>{product.brand}</TableCell>
+                <TableCell sx={{ color: "white" }}>
+                  {product.category}
+                </TableCell>
+                <TableCell sx={{ color: "white" }}>
+                  ₹{product.variants?.[0]?.price ?? "N/A"}
                 </TableCell>
                 <TableCell align="right">
                   <IconButton
@@ -99,5 +103,3 @@ const AdminProductList = () => {
 };
 
 export default AdminProductList;
-
-
