@@ -16,7 +16,6 @@ import NotFound from "./pages/NotFound";
 import OutOfStock from "./pages/OutOfStock";
 import ProtectedRoute from "./components/ProtectedRoute";
 import OrderPage from "./pages/OrderPage";
-import AdminProducts from "./pages/AdminProducts";
 import AdminOrders from "./pages/AdminOrders";
 import AdminAddProduct from "./pages/AdminAddProduct";
 import AdminProductList from "./pages/AdminProductList";
@@ -52,14 +51,8 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-      <Route
-        path="/admin/products"
-        element={
-          <ProtectedRoute admin>
-            <AdminProducts />
-          </ProtectedRoute>
-        }
-      />
+      
+    
       <Route
         path="/admin/orders"
         element={

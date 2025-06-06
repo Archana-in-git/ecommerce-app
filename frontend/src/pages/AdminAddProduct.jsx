@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
-import { addProduct } from "../../services/productService"; // you’ll create this API function
+import { addProduct } from "../services/productService"; // you’ll create this API function
 
 const AddProduct = () => {
   const [product, setProduct] = useState({
