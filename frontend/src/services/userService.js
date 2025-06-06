@@ -1,5 +1,6 @@
 // src/services/userService.js
 import api from "./api"; // centralized axios instance with baseURL and token
+import axios from "axios";
 
 // Newsletter signup
 export const sendNewsletterSignup = async ({ name, email }) => {
@@ -29,4 +30,16 @@ export const getAllUsers = async () => {
 export const updateUserStatus = async (userId, updates) => {
   const { data } = await api.put(`/users/${userId}/status`, updates);
   return data;
+};
+
+export const uploadProfileImage = async (file) => {
+  const formData = new FormData();
+  formData.append("image", file);
+
+  const { data } = await axios.post("/api/users/upload", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+    withCredentials: true,
+  });
+
+  return data.imageUrl;
 };

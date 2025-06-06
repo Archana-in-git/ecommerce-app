@@ -8,6 +8,8 @@ import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import errorHandler from "./middleware/errorHandler.js";
 import path from "path";
+import uploadRoutes from "./routes/uploadRoutes.js";
+
 
 dotenv.config();
 const app = express();
@@ -18,6 +20,8 @@ connectDB();
 const __dirname = path.resolve();
 
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+app.use("/api/users", uploadRoutes);
+
 
 const allowedOrigins = ["http://localhost:5173"]; // your frontend URL
 
