@@ -234,7 +234,13 @@ const ProductListing = () => {
                     variant="contained"
                     size="small"
                     component={Link}
-                    to={`/order/${product._id}`}
+                    to="/checkout"
+                    state={{
+                      productId: product._id,
+                      productName: product.name,
+                      price: product.variants?.[0]?.price || 0,
+                      quantity: 1, // default quantity
+                    }}
                     sx={{
                       backgroundColor: "#00C853",
                       textTransform: "none",

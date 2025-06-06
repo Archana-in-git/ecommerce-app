@@ -1,4 +1,5 @@
 /* navbar.css */
+@import url("https://fonts.googleapis.com/css2?family=Audiowide&display=swap");
 
 /* NAVBAR STYLING */
 .navbar {
@@ -26,7 +27,6 @@
   align-items: center;
   text-decoration: none;
 }
-
 
 /* DESKTOP NAV LINKS */
 .nav-links {
@@ -99,4 +99,12 @@
   font-weight: 500;
   letter-spacing: 0.5px;
   color: #ffffff;
+}
+
+.techcart-font {
+  font-family: "Audiowide", cursive;
+  color: #277121;
+  letter-spacing: 1px;
+  font-weight: bold;
+  font-size: 1.5rem;
 }

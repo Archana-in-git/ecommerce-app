@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Typography,
   TextField,
@@ -14,10 +14,30 @@ import {
 } from "@mui/material";
 import { useCart } from "../context/CartContext";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/Checkout.css"; // 👈 Import custom CSS
 
 const Checkout = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { cartItems, clearCart } = useCart();
+
+  // Memoize passedProduct to prevent unnecessary re-renders
+  const passedProduct = useMemo(() => {
+    if (location.state?.productId) {
+      return {
+        _id: location.state.productId,
+        name: location.state.productName,
+        quantity: location.state.quantity || 1,
+        variants: [{ price: location.state.price || 0 }],
+        selectedVariant: null,
+        imageUrls: [],
+      };
+    }
+    return null;
+  }, [location.state]);
+
+  const [orderItems, setOrderItems] = useState([]);
   const [shippingInfo, setShippingInfo] = useState({
     fullName: "",
     address: "",
@@ -25,12 +45,17 @@ const Checkout = () => {
     postalCode: "",
     country: "",
   });
-
   const [paymentMethod, setPaymentMethod] = useState("Credit Card");
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [error, setError] = useState("");
-  const { cartItems, clearCart } = useCart();
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (passedProduct) {
+      setOrderItems([passedProduct]);
+    } else {
+      setOrderItems(cartItems);
+    }
+  }, [passedProduct, cartItems]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -41,7 +66,7 @@ const Checkout = () => {
     const isFormValid = Object.values(shippingInfo).every(
       (val) => val.trim() !== ""
     );
-    if (!isFormValid || cartItems.length === 0) {
+    if (!isFormValid || orderItems.length === 0) {
       setError(
         "Please fill in all shipping fields and add items to your cart."
       );
@@ -50,7 +75,7 @@ const Checkout = () => {
 
     try {
       setError("");
-      const totalPrice = cartItems.reduce(
+      const totalPrice = orderItems.reduce(
         (acc, item) =>
           acc +
           (item.selectedVariant?.price || item.variants?.[0]?.price || 0) *
@@ -58,7 +83,7 @@ const Checkout = () => {
         0
       );
 
-      const orderItems = cartItems.map((item) => ({
+      const orderItemsForApi = orderItems.map((item) => ({
         _id: item._id,
         name: item.name,
         image: item.imageUrls?.[0],
@@ -70,7 +95,7 @@ const Checkout = () => {
       await axios.post(
         "/api/orders",
         {
-          orderItems,
+          orderItems: orderItemsForApi,
           shippingInfo,
           paymentMethod,
           totalPrice,
@@ -82,7 +107,10 @@ const Checkout = () => {
         }
       );
 
-      clearCart();
+      if (!passedProduct) {
+        clearCart();
+      }
+
       setOpenSnackbar(true);
       setTimeout(() => navigate("/"), 3000);
     } catch (err) {
@@ -90,7 +118,7 @@ const Checkout = () => {
     }
   };
 
-  const totalPrice = cartItems
+  const totalPrice = orderItems
     .reduce(
       (acc, item) =>
         acc +
@@ -159,19 +187,23 @@ const Checkout = () => {
             <Typography variant="h6" className="section-title">
               Order Summary
             </Typography>
-            {cartItems.map((item, idx) => (
-              <div key={idx} className="summary-item">
-                <span>
-                  {item.name} × {item.quantity}
-                </span>
-                <span>
-                  ₹
-                  {(item.selectedVariant?.price ||
-                    item.variants?.[0]?.price ||
-                    0) * item.quantity}
-                </span>
-              </div>
-            ))}
+            {orderItems.length === 0 ? (
+              <Typography>No items to order.</Typography>
+            ) : (
+              orderItems.map((item, idx) => (
+                <div key={idx} className="summary-item">
+                  <span>
+                    {item.name} × {item.quantity}
+                  </span>
+                  <span>
+                    ₹
+                    {(item.selectedVariant?.price ||
+                      item.variants?.[0]?.price ||
+                      0) * item.quantity}
+                  </span>
+                </div>
+              ))
+            )}
             <Divider className="divider" />
             <div className="summary-total">
               <strong>Total:</strong>

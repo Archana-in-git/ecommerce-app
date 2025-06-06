@@ -14,7 +14,6 @@ import Register from "./auth/Register";
 import NotFound from "./pages/NotFound";
 import OutOfStock from "./pages/OutOfStock";
 import ProtectedRoute from "./components/ProtectedRoute";
-import OrderPage from "./pages/OrderPage";
 import AdminOrders from "./pages/AdminOrders";
 import AdminAddProduct from "./pages/AdminAddProduct";
 import AdminProductList from "./pages/AdminProductList";
@@ -89,8 +88,6 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
-      <Route path="/order/:id" element={<OrderPage />} />
     </Routes>
   );
 };

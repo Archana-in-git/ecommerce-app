@@ -1,9 +1,21 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import {
+  Box,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  CircularProgress,
+} from "@mui/material";
+import api from "../services/api";
 import { useAuth } from "../context/AuthContext";
 
 const AdminOrders = () => {
-  const { user, token } = useAuth();
+  const { user } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -11,12 +23,9 @@ const AdminOrders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await axios.get("/api/orders", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await api.get("/orders/admin");
         setOrders(res.data);
+        setError("");
       } catch (err) {
         setError(err.response?.data?.message || "Failed to fetch orders");
       } finally {
@@ -30,37 +39,95 @@ const AdminOrders = () => {
       setError("Unauthorized");
       setLoading(false);
     }
-  }, [user, token]);
+  }, [user]);
 
-  if (loading) return <p>Loading orders...</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  if (loading)
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
+        <CircularProgress />
+      </Box>
+    );
+
+  if (error)
+    return (
+      <Typography color="error" align="center" sx={{ mt: 4 }}>
+        {error}
+      </Typography>
+    );
+
+  if (orders.length === 0)
+    return (
+      <Typography align="center" sx={{ mt: 4, color: "white" }}>
+        No orders found.
+      </Typography>
+    );
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Admin Orders</h2>
-      <table className="min-w-full border-collapse border border-gray-300">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="border p-2">Order ID</th>
-            <th className="border p-2">User</th>
-            <th className="border p-2">Amount</th>
-            <th className="border p-2">Status</th>
-            <th className="border p-2">Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order) => (
-            <tr key={order._id}>
-              <td className="border p-2">{order._id}</td>
-              <td className="border p-2">{order.user?.name || "N/A"}</td>
-              <td className="border p-2">${order.totalPrice}</td>
-              <td className="border p-2">{order.status}</td>
-              <td className="border p-2">{new Date(order.createdAt).toLocaleDateString()}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <Box sx={{ p: 4 }}>
+      <Typography variant="h4" fontWeight="bold" gutterBottom>
+        Admin Orders
+      </Typography>
+
+      <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
+        <Table aria-label="admin orders table">
+          <TableHead>
+            <TableRow sx={{ backgroundColor: "primary.main" }}>
+              <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+                Order ID
+              </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+                User
+              </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+                Amount
+              </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+                Status
+              </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+                Date
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {orders.map((order) => (
+              <TableRow
+                key={order._id}
+                hover
+                sx={{
+                  "&:last-child td, &:last-child th": { border: 0 },
+                  color: "white", // <-- add this line here
+                }}
+              >
+                <TableCell>{order._id}</TableCell>
+                <TableCell>{order.user?.name || "N/A"}</TableCell>
+                <TableCell>${order.totalPrice.toFixed(2)}</TableCell>
+                <TableCell
+                  sx={{
+                    color:
+                      order.status === "Delivered"
+                        ? "lightgreen"
+                        : order.status === "Pending"
+                        ? "orange"
+                        : "inherit",
+                    fontWeight: "medium",
+                  }}
+                >
+                  {order.status}
+                </TableCell>
+                <TableCell>
+                  {new Date(order.createdAt).toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 };
 
