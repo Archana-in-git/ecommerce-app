@@ -91,3 +91,29 @@ export const deleteProduct = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+// POST /api/products/:id/upload
+export const uploadProductImage = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const file = req.file;
+
+    if (!file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    const imageUrl = `/uploads/${file.filename}`; // or wherever you're saving it
+
+    // Optionally update product's image field
+    const product = await Product.findById(productId);
+    if (!product) return res.status(404).json({ message: "Product not found" });
+
+    product.image = imageUrl;
+    await product.save();
+
+    res.status(200).json({ imageUrl });
+  } catch (err) {
+    console.error("Image upload error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};

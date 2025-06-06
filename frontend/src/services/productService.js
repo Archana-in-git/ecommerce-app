@@ -52,3 +52,16 @@ export const getAdminProducts = async () => {
   });
   return res.data;
 };
+
+export const updateProduct = async (id, updatedProduct) => {
+  const response = await axios.put(`${BASE_URL}/products/${id}`, updatedProduct);
+  return response.data;
+};
+
+export const uploadProductImage = async (id, formData) => {
+  const response = await axios.post(`/products/${id}/upload`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+    withCredentials: true,
+  });
+  return response.data;
+};

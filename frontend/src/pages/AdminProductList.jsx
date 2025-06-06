@@ -13,12 +13,15 @@ import {
   Button,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { getAdminProducts, deleteProduct } from "../services/productService";
+import { useNavigate } from "react-router-dom";
 
 const AdminProductList = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+  const navigate = useNavigate();
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -49,6 +52,7 @@ const AdminProductList = () => {
       setDeletingId(null);
     }
   };
+
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, color: "white" }}>
@@ -85,6 +89,13 @@ const AdminProductList = () => {
                   ₹{product.variants?.[0]?.price ?? "N/A"}
                 </TableCell>
                 <TableCell align="right">
+                    <IconButton
+  color="primary"
+  onClick={() => navigate(`/admin/products/edit/${product._id}`)}
+>
+  <EditIcon />
+</IconButton>
+
                   <IconButton
                     color="error"
                     onClick={() => handleDelete(product._id)}

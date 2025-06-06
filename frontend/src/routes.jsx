@@ -18,6 +18,7 @@ import AdminOrders from "./pages/AdminOrders";
 import AdminAddProduct from "./pages/AdminAddProduct";
 import AdminProductList from "./pages/AdminProductList";
 import AdminUsers from "./pages/AdminUsers"; // <-- ADD THIS
+import AdminEditProduct from "./pages/AdminEditProduct";
 
 const AppRoutes = () => {
   const { user } = useAuth();
@@ -88,6 +89,9 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
+<Route path="/admin/products/edit/:id" element={<ProtectedRoute admin><AdminEditProduct /></ProtectedRoute>} />
+
     </Routes>
   );
 };
