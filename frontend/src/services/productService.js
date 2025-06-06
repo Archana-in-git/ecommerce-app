@@ -45,11 +45,10 @@ export const deleteProduct = async (id) => {
 
 // Get all products for admin (authenticated)
 export const getAdminProducts = async () => {
-  const res = await fetch("/api/products/admin", {
+  const res = await axios.get(`${BASE_URL}/products/admin`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });
-  if (!res.ok) throw new Error("Failed to fetch admin products");
-  return res.json();
+  return res.data;
 };

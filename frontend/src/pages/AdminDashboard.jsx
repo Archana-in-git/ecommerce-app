@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import StatsCard from "../components/StatsCard";
 import ChartPanel from "../components/ChartPanel";
 import OrdersTable from "../components/OrdersTable";
+import AdminProductList from "./AdminProductList"; // ✅ Import it
 
 const AdminDashboard = () => {
   return (
@@ -28,6 +29,11 @@ const AdminDashboard = () => {
             <OrdersTable />
           </Grid>
         </Grid>
+
+        {/* ✅ Add Product List Below Existing Dashboard Widgets */}
+        <Box sx={{ mt: 5 }}>
+          <AdminProductList />
+        </Box>
       </Box>
     </Box>
   );
