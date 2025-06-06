@@ -1,49 +1,69 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableHead,
-  TableBody,
   TableRow,
   TableCell,
-  Card,
-  CardContent,
+  TableBody,
+  Paper,
+  TableContainer,
   Typography,
+  CircularProgress,
 } from "@mui/material";
+import { getAllOrdersForAdmin } from "../services/orderService";
 
-const orders = [
-  { id: "ORD001", user: "John", total: "$120", status: "Shipped" },
-  { id: "ORD002", user: "Emma", total: "$340", status: "Processing" },
-  { id: "ORD003", user: "Liam", total: "$90", status: "Delivered" },
-];
+const OrdersTable = () => {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-const OrdersTable = () => (
-  <Card>
-    <CardContent>
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const data = await getAllOrdersForAdmin();
+        setOrders(data);
+      } catch (err) {
+        console.error("Failed to fetch orders", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  if (loading) return <CircularProgress />;
+
+  return (
+    <>
       <Typography variant="h6" gutterBottom>
         Recent Orders
       </Typography>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Order ID</TableCell>
-            <TableCell>User</TableCell>
-            <TableCell>Total</TableCell>
-            <TableCell>Status</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {orders.map((order) => (
-            <TableRow key={order.id}>
-              <TableCell>{order.id}</TableCell>
-              <TableCell>{order.user}</TableCell>
-              <TableCell>{order.total}</TableCell>
-              <TableCell>{order.status}</TableCell>
+      <TableContainer component={Paper}>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Order ID</TableCell>
+              <TableCell>User</TableCell>
+              <TableCell>Total</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Date</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </CardContent>
-  </Card>
-);
+          </TableHead>
+          <TableBody>
+            {orders.map((order) => (
+              <TableRow key={order._id}>
+                <TableCell>{order._id.slice(-6)}</TableCell>
+                <TableCell>{order.user?.username || "Guest"}</TableCell>
+                <TableCell>${order.totalPrice.toFixed(2)}</TableCell>
+                <TableCell>{order.status}</TableCell>
+                <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
+  );
+};
 
 export default OrdersTable;
