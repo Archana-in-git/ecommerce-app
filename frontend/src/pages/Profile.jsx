@@ -113,11 +113,18 @@ const Profile = () => {
           gap: 1,
         }}
       >
-        <Avatar
-          src={profile.profilePicture}
-          alt={profile.username || "User Avatar"}
-          sx={{ width: 80, height: 80 }}
-        />
+        {profile.profilePicture ? (
+  <Avatar
+    src={profile.profilePicture}
+    alt={profile.username || "User Avatar"}
+    sx={{ width: 80, height: 80 }}
+  />
+) : (
+  <Typography variant="body2" sx={{ mt: 1, color: "#ccc" }}>
+    No profile picture uploaded
+  </Typography>
+)}
+
 
         <label htmlFor="profile-upload">
           <input
