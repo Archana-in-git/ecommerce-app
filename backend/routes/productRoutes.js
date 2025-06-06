@@ -9,12 +9,12 @@ import {
   getAdminProducts, // added for admin product listing
 } from "../controllers/productController.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
-import uploadMiddleware from "../middleware/uploadMiddleware.js"; // for multer
+import uploadMiddleware from "../middleware/upload.js"; // for multer
 
 const router = express.Router();
 
 // Create a new product
-router.post("/",protect,admin, createProduct);
+router.post("/", protect, admin, createProduct);
 
 // Get all products for admin
 router.get("/admin", protect, admin, getAdminProducts);
@@ -29,7 +29,7 @@ router.get("/", getAllProducts); // changed from "/:id" to "/" for list endpoint
 router.get("/:id", getProductById);
 
 // Update a product by ID
-router.put("/:id",protect,admin, updateProduct);
+router.put("/:id", protect, admin, updateProduct);
 
 router.post(
   "/:id/upload",
