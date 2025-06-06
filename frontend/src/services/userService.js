@@ -1,30 +1,32 @@
-import axios from "./api"; // adjust path if needed
+// src/services/userService.js
+import api from "./api"; // centralized axios instance with baseURL and token
+
+// Newsletter signup
 export const sendNewsletterSignup = async ({ name, email }) => {
-  const res = await axios.post("/newsletter/signup", { name, email });
+  const res = await api.post("/newsletter/signup", { name, email });
   return res.data;
 };
-// src/services/userService.js
 
-// Fetch current user profile
+// Fetch current logged-in user profile
 export const getUserProfile = async () => {
-  const response = await axios.get("/users/profile");
+  const response = await api.get("/users/profile");
   return response.data;
 };
 
-// Update user profile
+// Update logged-in user profile
 export const updateUserProfile = async (profileData) => {
-  const response = await axios.put("/users/profile", profileData);
+  const response = await api.put("/users/profile", profileData);
   return response.data;
 };
 
+// Fetch all users (admin)
 export const getAllUsers = async () => {
-  const { data } = await axios.get(`${BASE_URL}/users`, { withCredentials: true });
+  const { data } = await api.get("/users");
   return data;
 };
 
+// Update user status (suspend/ban) - admin only
 export const updateUserStatus = async (userId, updates) => {
-  const { data } = await axios.put(`${BASE_URL}/users/${userId}/status`, updates, {
-    withCredentials: true,
-  });
+  const { data } = await api.put(`/users/${userId}/status`, updates);
   return data;
 };

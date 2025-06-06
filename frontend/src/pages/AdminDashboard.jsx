@@ -29,11 +29,6 @@ const AdminDashboard = () => {
             <OrdersTable />
           </Grid>
         </Grid>
-
-        {/* ✅ Add Product List Below Existing Dashboard Widgets */}
-        <Box sx={{ mt: 5 }}>
-          <AdminProductList />
-        </Box>
       </Box>
     </Box>
   );

@@ -8,7 +8,7 @@ const Sidebar = () => {
 
   const commonLinks = [
     { text: "Dashboard", path: "/admin" },
-    { text: "Orders", path: "/orders" },
+    { text: "Orders", path: "/admin/orders" }, // <-- fix here
     { text: "Settings", path: "/settings" },
   ];
 
@@ -26,7 +26,11 @@ const Sidebar = () => {
       sx={{
         width: 240,
         flexShrink: 0,
-        [`& .MuiDrawer-paper`]: { width: 240, boxSizing: "border-box", backgroundColor: "#1e1e1e" }, // optional: dark background
+        [`& .MuiDrawer-paper`]: {
+          width: 240,
+          boxSizing: "border-box",
+          backgroundColor: "#1e1e1e",
+        }, // optional: dark background
       }}
     >
       <Toolbar />
@@ -45,4 +49,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-

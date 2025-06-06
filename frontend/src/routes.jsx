@@ -1,4 +1,3 @@
-// src/routes.jsx
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
@@ -19,6 +18,7 @@ import OrderPage from "./pages/OrderPage";
 import AdminOrders from "./pages/AdminOrders";
 import AdminAddProduct from "./pages/AdminAddProduct";
 import AdminProductList from "./pages/AdminProductList";
+import AdminUsers from "./pages/AdminUsers"; // <-- ADD THIS
 
 const AppRoutes = () => {
   const { user } = useAuth();
@@ -43,6 +43,7 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/admin"
         element={
@@ -51,8 +52,7 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-      
-    
+
       <Route
         path="/admin/orders"
         element={
@@ -61,13 +61,36 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-      <Route path="/admin/add-product" element={<ProtectedRoute admin><AdminAddProduct/></ProtectedRoute>} />
-<Route
-  path="/admin/products"
-  element={ <ProtectedRoute admin><AdminProductList /></ProtectedRoute>}
-/>
-      <Route path="/order/:id" element={<OrderPage />} />
 
+      <Route
+        path="/admin/add-product"
+        element={
+          <ProtectedRoute admin>
+            <AdminAddProduct />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/products"
+        element={
+          <ProtectedRoute admin>
+            <AdminProductList />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* ADD the AdminUsers route here */}
+      <Route
+        path="/admin/users"
+        element={
+          <ProtectedRoute admin>
+            <AdminUsers />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route path="/order/:id" element={<OrderPage />} />
     </Routes>
   );
 };

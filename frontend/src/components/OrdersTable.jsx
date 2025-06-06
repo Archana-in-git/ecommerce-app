@@ -1,68 +1,80 @@
+// src/components/OrdersTable.jsx
 import React, { useEffect, useState } from "react";
+import api from "../services/api"; // your axios instance with interceptors
+import { useAuth } from "../context/AuthContext";
 import {
   Table,
+  TableBody,
+  TableCell,
+  TableContainer,
   TableHead,
   TableRow,
-  TableCell,
-  TableBody,
   Paper,
-  TableContainer,
   Typography,
   CircularProgress,
 } from "@mui/material";
-import { getAllOrdersForAdmin } from "../services/orderService";
 
 const OrdersTable = () => {
+  const { user } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const data = await getAllOrdersForAdmin();
-        setOrders(data);
+        if (!user || user.role !== "admin") {
+          setError("Unauthorized");
+          setLoading(false);
+          return;
+        }
+        // FIX: Use the correct admin orders route
+        const res = await api.get("/orders/admin");
+        setOrders(res.data);
+        setError(""); // Clear error if successful
       } catch (err) {
-        console.error("Failed to fetch orders", err);
+        setError(err.response?.data?.message || "Failed to fetch orders");
       } finally {
         setLoading(false);
       }
     };
 
     fetchOrders();
-  }, []);
+  }, [user]);
 
   if (loading) return <CircularProgress />;
+  if (error) return <Typography color="error">{error}</Typography>;
 
   return (
-    <>
-      <Typography variant="h6" gutterBottom>
+    <TableContainer component={Paper} elevation={3}>
+      <Typography variant="h6" sx={{ p: 2 }}>
         Recent Orders
       </Typography>
-      <TableContainer component={Paper}>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>Order ID</TableCell>
-              <TableCell>User</TableCell>
-              <TableCell>Total</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Date</TableCell>
+      <Table size="small" aria-label="orders table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Order ID</TableCell>
+            <TableCell>User</TableCell>
+            <TableCell>Amount</TableCell>
+            <TableCell>Status</TableCell>
+            <TableCell>Date</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {orders.map((order) => (
+            <TableRow key={order._id}>
+              <TableCell>{order._id}</TableCell>
+              <TableCell>{order.user?.name || "N/A"}</TableCell>
+              <TableCell>${order.totalPrice.toFixed(2)}</TableCell>
+              <TableCell>{order.status}</TableCell>
+              <TableCell>
+                {new Date(order.createdAt).toLocaleDateString()}
+              </TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {orders.map((order) => (
-              <TableRow key={order._id}>
-                <TableCell>{order._id.slice(-6)}</TableCell>
-                <TableCell>{order.user?.username || "Guest"}</TableCell>
-                <TableCell>${order.totalPrice.toFixed(2)}</TableCell>
-                <TableCell>{order.status}</TableCell>
-                <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 

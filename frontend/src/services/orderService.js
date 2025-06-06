@@ -1,8 +1,6 @@
-import axios from "axios";
-
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+import api from "./api"; // ✅ use configured axios instance
 
 export const getAllOrdersForAdmin = async () => {
-  const { data } = await axios.get(`${BASE_URL}/orders`, { withCredentials: true });
+  const { data } = await api.get("/orders/admin");
   return data;
 };
