@@ -41,7 +41,6 @@ export default function Navbar() {
     { title: "Home", path: "/" },
     { title: "Products", path: "/products" },
     { title: "Profile", path: "/profile" },
-    { title: "Checkout", path: "/checkout" },
   ];
 
   // ✅ Conditionally show admin link
@@ -57,9 +56,23 @@ export default function Navbar() {
     >
       <Toolbar className="toolbar">
         {/* Logo */}
-        <Link to="/" className="logo-link">
-          <img src={logo} alt="TechCart Logo" className="logo" />
-        </Link>
+        {/* Logo with App Name */}
+<Link
+  to="/"
+  className="logo-link"
+  style={{ display: "flex", alignItems: "center", textDecoration: "none" }}
+>
+  <img
+    src={logo}
+    alt="TechCart Logo"
+    className="logo"
+    style={{ height: "40px", marginRight: "10px" }}
+  />
+  <span style={{ color: "#fff", fontSize: "1.5rem", fontWeight: "bold" }}>
+    TechCart
+  </span>
+</Link>
+
 
         {/* Desktop Nav Links */}
         <Box className="nav-links">
