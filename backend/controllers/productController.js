@@ -12,7 +12,7 @@ export const createProduct = async (req, res) => {
   }
 };
 
-// Get products with optional search and filters
+/// Get products with optional search and filters
 export const getAllProducts = async (req, res) => {
   try {
     const { search, category, location } = req.query;
@@ -35,6 +35,16 @@ export const getAllProducts = async (req, res) => {
     }
 
     const products = await Product.find(filter);
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// ✅ NEW: Get all products without filters (for admin)
+export const getAdminProducts = async (req, res) => {
+  try {
+    const products = await Product.find(); // No filters
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
@@ -81,4 +91,3 @@ export const deleteProduct = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-

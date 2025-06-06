@@ -11,7 +11,6 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: "Email already in use" });
     }
 
-    // ❌ DO NOT hash here — model already does it
     const user = new User({ username, email, password, role });
     await user.save();
 
