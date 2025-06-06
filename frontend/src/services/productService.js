@@ -5,6 +5,10 @@ console.log(
   "API Base URL:",
   import.meta.env.VITE_API_URL || "http://localhost:5000/api"
 );
+// Utility: get token from localStorage
+const authHeader = () => ({
+  Authorization: `Bearer ${localStorage.getItem("token")}`,
+});
 
 // Get all products
 export const getAllProducts = async (filters = {}) => {
@@ -19,28 +23,23 @@ export const getProductById = async (id) => {
   return response.data;
 };
 
+// Add a new product (admin)
 export const addProduct = async (productData) => {
-  const res = await fetch("/api/products", {
-    method: "POST",
+  const response = await axios.post(`${BASE_URL}/products`, productData, {
     headers: {
+      ...authHeader(),
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`, // if using JWT
     },
-    body: JSON.stringify(productData),
   });
-  if (!res.ok) throw new Error("Failed to add product");
-  return res.json();
+  return response.data;
 };
 
+// Delete a product (admin)
 export const deleteProduct = async (id) => {
-  const res = await fetch(`/api/products/${id}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
+  const response = await axios.delete(`${BASE_URL}/products/${id}`, {
+    headers: authHeader(),
   });
-  if (!res.ok) throw new Error("Failed to delete");
-  return res.json();
+  return response.data;
 };
 
 // Get all products for admin (authenticated)
@@ -53,15 +52,24 @@ export const getAdminProducts = async () => {
   return res.data;
 };
 
+// Update a product by ID
 export const updateProduct = async (id, updatedProduct) => {
-  const response = await axios.put(`${BASE_URL}/products/${id}`, updatedProduct);
+  const response = await axios.put(`${BASE_URL}/products/${id}`, updatedProduct, {
+    headers: {
+      ...authHeader(),
+      "Content-Type": "application/json",
+    },
+  });
   return response.data;
 };
 
+// Upload product image
 export const uploadProductImage = async (id, formData) => {
-  const response = await axios.post(`/products/${id}/upload`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-    withCredentials: true,
+  const response = await axios.post(`${BASE_URL}/products/${id}/upload`, formData, {
+    headers: {
+      ...authHeader(),
+      "Content-Type": "multipart/form-data",
+    },
   });
   return response.data;
 };

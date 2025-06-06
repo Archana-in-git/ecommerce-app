@@ -39,9 +39,7 @@ const AdminAddProduct = () => {
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    setUploading(true);
-    setError(null);
-
+    
     const formData = new FormData();
     formData.append("image", file);
 

@@ -9,7 +9,7 @@ import {
   getAdminProducts, // added for admin product listing
 } from "../controllers/productController.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
-import uploadMiddleware from "../middleware/upload.js"; // for multer
+import upload from "../middleware/upload.js"; // for multer
 
 const router = express.Router();
 
@@ -35,7 +35,7 @@ router.post(
   "/:id/upload",
   protect,
   admin,
-  uploadMiddleware.single("image"),
+  upload.single("image"),
   uploadProductImage
 );
 

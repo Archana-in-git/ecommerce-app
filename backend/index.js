@@ -20,7 +20,7 @@ connectDB();
 const __dirname = path.resolve();
 
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
-app.use("/api/users", uploadRoutes);
+app.use("/api/products", uploadRoutes);
 
 
 const allowedOrigins = ["http://localhost:5173"]; // your frontend URL
@@ -37,7 +37,7 @@ app.use(
       }
       return callback(null, true);
     },
-    credentials: true, // allow cookies and auth headers
+    
   })
 );
 

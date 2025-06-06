@@ -82,38 +82,27 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
+    console.log("Deleting product with ID:", req.params.id); // 🔍 Log it
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ message: "Product not found" });
 
     await product.remove();
     res.json({ message: "Product removed" });
   } catch (err) {
+      console.error("Delete error:", err.message); // 👀 Check for errors
     res.status(500).json({ message: "Server error" });
   }
 };
 
 // POST /api/products/:id/upload
 export const uploadProductImage = async (req, res) => {
-  try {
-    const productId = req.params.id;
-    const file = req.file;
-
-    if (!file) {
-      return res.status(400).json({ message: "No file uploaded" });
-    }
-
-    const imageUrl = `/uploads/${file.filename}`; // or wherever you're saving it
-
-    // Optionally update product's image field
-    const product = await Product.findById(productId);
-    if (!product) return res.status(404).json({ message: "Product not found" });
-
-    product.image = imageUrl;
-    await product.save();
-
-    res.status(200).json({ imageUrl });
-  } catch (err) {
-    console.error("Image upload error:", err);
-    res.status(500).json({ message: "Server error" });
+  if (!req.file) {
+    return res.status(400).json({ message: "No file uploaded" });
   }
+
+  // This returns the image path like /uploads/xyz123.jpg
+  const imageUrl = `/uploads/${req.file.filename}`;
+
+  res.status(200).json({ imageUrl });
 };
+
