@@ -13,7 +13,7 @@ import {
   Button,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { getAllProducts, deleteProduct } from "../services/productService";
+import { getAdminProducts, deleteProduct } from "../services/productService";
 
 const AdminProductList = () => {
   const [products, setProducts] = useState([]);
@@ -23,7 +23,7 @@ const AdminProductList = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const data = await getAllProducts();
+      const data = await getAdminProducts(); // ✅ CALL CORRECT ROUTE
       setProducts(data);
     } catch (err) {
       console.error("Failed to load products:", err.message);

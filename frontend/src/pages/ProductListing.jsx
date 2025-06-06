@@ -20,10 +20,12 @@ import { deleteProduct } from "../services/productService";
 import { getAllProducts } from "../services/productService";
 import Slider from "react-slick";
 import "../styles/ProductListing.css"; // CSS file with card + dot styles
+import { useAuth } from "../context/AuthContext";
 
 const categories = ["All", "Smartphones", "Tablets", "Accessories"];
 
 const ProductListing = () => {
+  const { user } = useAuth(); // ✅ access current user
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -64,14 +66,13 @@ const ProductListing = () => {
   if (loading) return <p>Loading products...</p>;
   if (error) return <p>{error}</p>;
   const handleDelete = async (id) => {
-  try {
-    await deleteProduct(id);
-    setProducts(products.filter((p) => p._id !== id));
-  } catch (err) {
-    console.error("Delete failed", err);
-  }
-};
-
+    try {
+      await deleteProduct(id);
+      setProducts(products.filter((p) => p._id !== id));
+    } catch (err) {
+      console.error("Delete failed", err);
+    }
+  };
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -244,15 +245,15 @@ const ProductListing = () => {
                     Order Now
                   </Button>
                   {user?.role === "admin" && (
-    <Button
-      color="error"
-      size="small"
-      onClick={() => handleDelete(product._id)}
-      sx={{ fontSize: "0.85rem" }}
-    >
-      Delete
-    </Button>
-  )}
+                    <Button
+                      color="error"
+                      size="small"
+                      onClick={() => handleDelete(product._id)}
+                      sx={{ fontSize: "0.85rem" }}
+                    >
+                      Delete
+                    </Button>
+                  )}
                 </CardActions>
               </Card>
             </Grid>
