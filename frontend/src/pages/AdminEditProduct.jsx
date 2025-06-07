@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import { getProductById, updateProduct } from "../services/productService";
 
+const BASE_URL = import.meta.env.VITE_API_URL.replace("/api", "");
+
 const AdminEditProduct = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -41,6 +43,7 @@ const AdminEditProduct = () => {
     setProduct({ ...product, variants: updatedVariants });
   };
 
+  // Image upload handler
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -56,7 +59,16 @@ const AdminEditProduct = () => {
         withCredentials: true,
       });
 
-      setProduct({ ...product, image: data.imageUrl });
+      // ✅ Log the returned URL
+      console.log("Uploaded image URL from backend:", data.imageUrl);
+
+      // Append new image URL to imageUrls array
+      setProduct((prev) => ({
+        ...prev,
+        imageUrls: prev.imageUrls
+          ? [...prev.imageUrls, data.imageUrl]
+          : [data.imageUrl],
+      }));
     } catch (err) {
       console.error("Image upload failed", err);
       alert("Image upload failed");
@@ -137,20 +149,22 @@ const AdminEditProduct = () => {
           sx={whiteTextFieldStyle}
         />
 
-        {product.image && (
-          <Box my={2}>
-            <img
-              src={product.image}
-              alt="Product"
-              style={{
-                maxWidth: "150px",
-                borderRadius: "8px",
-                marginBottom: "8px",
-              }}
-            />
+        {product.imageUrls && product.imageUrls.length > 0 && (
+          <Box my={2} sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+            {product.imageUrls.map((imgUrl, idx) => (
+              <Box key={idx} sx={{ position: "relative" }}>
+                <img
+                  src={
+                    imgUrl.startsWith("http") ? imgUrl : `${BASE_URL}${imgUrl}`
+                  }
+                  alt={`Product image ${idx + 1}`}
+                  style={{ maxWidth: "100px", borderRadius: "8px" }}
+                />
+                {/* Optional: Add remove button here if needed */}
+              </Box>
+            ))}
           </Box>
         )}
-
         <Button variant="outlined" component="label" sx={{ mb: 2 }}>
           Change Image
           <input
@@ -160,7 +174,6 @@ const AdminEditProduct = () => {
             onChange={handleImageChange}
           />
         </Button>
-
         <Button
           type="submit"
           variant="contained"

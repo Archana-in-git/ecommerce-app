@@ -54,22 +54,30 @@ export const getAdminProducts = async () => {
 
 // Update a product by ID
 export const updateProduct = async (id, updatedProduct) => {
-  const response = await axios.put(`${BASE_URL}/products/${id}`, updatedProduct, {
-    headers: {
-      ...authHeader(),
-      "Content-Type": "application/json",
-    },
-  });
+  const response = await axios.put(
+    `${BASE_URL}/products/${id}`,
+    updatedProduct,
+    {
+      headers: {
+        ...authHeader(),
+        "Content-Type": "application/json",
+      },
+    }
+  );
   return response.data;
 };
 
 // Upload product image
 export const uploadProductImage = async (id, formData) => {
-  const response = await axios.post(`${BASE_URL}/products/${id}/upload`, formData, {
-    headers: {
-      ...authHeader(),
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  const response = await axios.post(
+    `${BASE_URL}/products/${id}/upload`,
+    formData,
+    {
+      headers: {
+        ...authHeader(),
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
   return response.data;
 };

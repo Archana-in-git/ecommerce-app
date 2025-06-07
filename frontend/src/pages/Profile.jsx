@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Avatar, Box, Button, TextField, Typography } from "@mui/material";
 import { getUserProfile, updateUserProfile } from "../services/userService";
-import axios from "../services/api"; // or wherever your axios instance is
+import axios from "../services/api"; // your configured axios instance
 
 const Profile = () => {
   const [profile, setProfile] = useState({
@@ -18,11 +18,20 @@ const Profile = () => {
     async function fetchProfile() {
       try {
         const data = await getUserProfile();
-        setProfile(data);
+
+        // Prefer preview (base64), else use uploaded image from localStorage, else server image
+        const preview = localStorage.getItem("profilePreview");
+        const storedImage = localStorage.getItem("profileImage");
+
+        setProfile({
+          ...data,
+          profilePicture: preview || storedImage || data.profilePicture,
+        });
       } catch (error) {
         console.error("Failed to fetch profile", error);
       }
     }
+
     fetchProfile();
   }, []);
 
@@ -31,10 +40,11 @@ const Profile = () => {
     setLoading(true);
     try {
       await updateUserProfile(profile);
-      alert("Profile updated successfully!");
     } catch (error) {
-      console.error("Failed to update profile", error);
-      alert("Failed to update profile");
+      console.error(
+        "Failed to update profile",
+        error?.response?.data || error.message
+      );
     }
     setLoading(false);
   };
@@ -50,30 +60,45 @@ const Profile = () => {
     const formData = new FormData();
     formData.append("profilePicture", file);
 
+    // Base64 Preview
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      localStorage.setItem("profilePreview", reader.result);
+      console.log("Preview saved to localStorage:", reader.result);
+      setProfile((prev) => ({
+        ...prev,
+        profilePicture: reader.result,
+      }));
+    };
+    reader.readAsDataURL(file);
+
     try {
       setLoading(true);
-      // Assuming your backend upload endpoint is /api/users/profile/upload
       const response = await axios.post("/users/profile/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true, // important for cookies/auth
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true,
       });
 
-      // The backend should respond with something like { imageUrl: "/uploads/filename.jpg" }
-      const imageUrl = response.data.imageUrl;
-
-      setProfile((prev) => ({ ...prev, profilePicture: imageUrl }));
+      const imageUrl = response?.data?.imageUrl;
+      if (imageUrl) {
+        const fullImageUrl =
+          (import.meta.env.VITE_API_BASE_URL || "http://localhost:5000") +
+          imageUrl;
+        localStorage.removeItem("profilePreview"); // clear temp preview
+        localStorage.setItem("profileImage", fullImageUrl); // persist uploaded image with full URL
+        console.log("Server uploaded image full URL:", fullImageUrl);
+        setProfile((prev) => ({
+          ...prev,
+          profilePicture: fullImageUrl,
+        }));
+      }
     } catch (error) {
-      console.error("Failed to upload image", error);
-      alert("Image upload failed");
+      console.warn("Image upload failed silently.", error);
     } finally {
       setLoading(false);
     }
   };
-
-  // Use your CSS variable or hardcode your dark background color here:
-  const darkBgAlt = "rgb(20, 20, 30)"; // fallback for var(--dark-bg-alt)
+  const darkBgAlt = "rgb(20, 20, 30)";
 
   return (
     <Box
@@ -91,7 +116,6 @@ const Profile = () => {
       }}
     >
       <Typography
-        className="login-title"
         variant="h4"
         component="h1"
         sx={{
@@ -148,7 +172,6 @@ const Profile = () => {
       </Box>
 
       <form onSubmit={handleSubmit} noValidate>
-        {/** TextField style matching `.login-input` */}
         <TextField
           label="Name"
           name="username"
@@ -163,18 +186,10 @@ const Profile = () => {
               backgroundColor: "#2c2c3c",
               borderRadius: "8px",
               color: "#fff",
-              "& .MuiInputBase-input": {
-                color: "#fff",
-              },
-              "& .MuiInputLabel-root": {
-                color: "#aaa",
-              },
-              "& .MuiInputLabel-root.Mui-focused": {
-                color: "#00ff7f",
-              },
-              "& .MuiFilledInput-root:before": {
-                borderBottom: "none",
-              },
+              "& .MuiInputBase-input": { color: "#fff" },
+              "& .MuiInputLabel-root": { color: "#aaa" },
+              "& .MuiInputLabel-root.Mui-focused": { color: "#00ff7f" },
+              "& .MuiFilledInput-root:before": { borderBottom: "none" },
               "& .MuiFilledInput-root:hover:not(.Mui-disabled):before": {
                 borderBottom: "none",
               },
@@ -197,18 +212,10 @@ const Profile = () => {
               backgroundColor: "#2c2c3c",
               borderRadius: "8px",
               color: "#fff",
-              "& .MuiInputBase-input": {
-                color: "#fff",
-              },
-              "& .MuiInputLabel-root": {
-                color: "#aaa",
-              },
-              "& .MuiInputLabel-root.Mui-focused": {
-                color: "#00ff7f",
-              },
-              "& .MuiFilledInput-root:before": {
-                borderBottom: "none",
-              },
+              "& .MuiInputBase-input": { color: "#fff" },
+              "& .MuiInputLabel-root": { color: "#aaa" },
+              "& .MuiInputLabel-root.Mui-focused": { color: "#00ff7f" },
+              "& .MuiFilledInput-root:before": { borderBottom: "none" },
               "& .MuiFilledInput-root:hover:not(.Mui-disabled):before": {
                 borderBottom: "none",
               },
@@ -229,18 +236,10 @@ const Profile = () => {
               backgroundColor: "#2c2c3c",
               borderRadius: "8px",
               color: "#fff",
-              "& .MuiInputBase-input": {
-                color: "#fff",
-              },
-              "& .MuiInputLabel-root": {
-                color: "#aaa",
-              },
-              "& .MuiInputLabel-root.Mui-focused": {
-                color: "#00ff7f",
-              },
-              "& .MuiFilledInput-root:before": {
-                borderBottom: "none",
-              },
+              "& .MuiInputBase-input": { color: "#fff" },
+              "& .MuiInputLabel-root": { color: "#aaa" },
+              "& .MuiInputLabel-root.Mui-focused": { color: "#00ff7f" },
+              "& .MuiFilledInput-root:before": { borderBottom: "none" },
               "& .MuiFilledInput-root:hover:not(.Mui-disabled):before": {
                 borderBottom: "none",
               },
@@ -263,18 +262,10 @@ const Profile = () => {
               backgroundColor: "#2c2c3c",
               borderRadius: "8px",
               color: "#fff",
-              "& .MuiInputBase-input": {
-                color: "#fff",
-              },
-              "& .MuiInputLabel-root": {
-                color: "#aaa",
-              },
-              "& .MuiInputLabel-root.Mui-focused": {
-                color: "#00ff7f",
-              },
-              "& .MuiFilledInput-root:before": {
-                borderBottom: "none",
-              },
+              "& .MuiInputBase-input": { color: "#fff" },
+              "& .MuiInputLabel-root": { color: "#aaa" },
+              "& .MuiInputLabel-root.Mui-focused": { color: "#00ff7f" },
+              "& .MuiFilledInput-root:before": { borderBottom: "none" },
               "& .MuiFilledInput-root:hover:not(.Mui-disabled):before": {
                 borderBottom: "none",
               },

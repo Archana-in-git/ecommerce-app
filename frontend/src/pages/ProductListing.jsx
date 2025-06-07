@@ -176,20 +176,29 @@ const ProductListing = () => {
               >
                 <Box sx={{ px: 1.5, pt: 1.5 }}>
                   <Slider {...sliderSettings}>
-                    {product.imageUrls.map((url, index) => (
-                      <Box key={index}>
-                        <img
-                          src={url}
-                          alt={`${product.name} image ${index + 1}`}
-                          style={{
-                            width: "100%",
-                            height: "160px", // reduced from 180px for smaller card
-                            objectFit: "contain",
-                            borderRadius: "8px",
-                          }}
-                        />
-                      </Box>
-                    ))}
+                    {product.imageUrls.map((url, index) => {
+                      const imageSrc = url.startsWith("http")
+                        ? url
+                        : `${import.meta.env.VITE_API_URL.replace(
+                            "/api",
+                            ""
+                          )}${url}`;
+
+                      return (
+                        <Box key={index}>
+                          <img
+                            src={imageSrc}
+                            alt={`${product.name} image ${index + 1}`}
+                            style={{
+                              width: "100%",
+                              height: "160px",
+                              objectFit: "contain",
+                              borderRadius: "8px",
+                            }}
+                          />
+                        </Box>
+                      );
+                    })}
                   </Slider>
                 </Box>
 
