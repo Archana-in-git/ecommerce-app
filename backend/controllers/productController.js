@@ -65,15 +65,22 @@ export const getProductById = async (req, res) => {
 // Update product by ID
 export const updateProduct = async (req, res) => {
   try {
+    console.log("Updating product with ID:", req.params.id);
+    console.log("Update data:", req.body);
+
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true, runValidators: true }
     );
-    if (!updatedProduct)
+
+    if (!updatedProduct) {
       return res.status(404).json({ message: "Product not found" });
+    }
+
     res.json(updatedProduct);
   } catch (error) {
+    console.error("Update error:", error.message);
     res.status(500).json({ message: error.message });
   }
 };
@@ -82,14 +89,18 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
-    console.log("Deleting product with ID:", req.params.id); // 🔍 Log it
-    const product = await Product.findById(req.params.id);
-    if (!product) return res.status(404).json({ message: "Product not found" });
+    console.log("Deleting product with ID:", req.params.id);
 
-    await product.remove();
+    // Directly delete by ID
+    const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+
+    if (!deletedProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
     res.json({ message: "Product removed" });
   } catch (err) {
-      console.error("Delete error:", err.message); // 👀 Check for errors
+    console.error("Delete error:", err.message);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -100,9 +111,21 @@ export const uploadProductImage = async (req, res) => {
     return res.status(400).json({ message: "No file uploaded" });
   }
 
-  // This returns the image path like /uploads/xyz123.jpg
   const imageUrl = `/uploads/${req.file.filename}`;
 
-  res.status(200).json({ imageUrl });
-};
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
 
+    // Add the new image URL to the product's imageUrls array
+    product.imageUrls.push(imageUrl);
+
+    await product.save();
+
+    res.status(200).json({ imageUrl });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
