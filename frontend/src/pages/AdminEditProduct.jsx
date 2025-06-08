@@ -75,6 +75,14 @@ const AdminEditProduct = () => {
     }
   };
 
+  const handleRemoveImage = (indexToRemove) => {
+  setProduct((prevProduct) => ({
+    ...prevProduct,
+    imageUrls: prevProduct.imageUrls.filter((_, idx) => idx !== indexToRemove),
+  }));
+};
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -161,6 +169,24 @@ const AdminEditProduct = () => {
                   style={{ maxWidth: "100px", borderRadius: "8px" }}
                 />
                 {/* Optional: Add remove button here if needed */}
+                  <Button
+      size="small"
+      color="error"
+      variant="contained"
+      sx={{
+        position: "absolute",
+        top: 0,
+        right: 0,
+        minWidth: "24px",
+        height: "24px",
+        fontSize: "12px",
+        p: 0,
+      }}
+      onClick={() => handleRemoveImage(idx)}
+    >
+      ×
+    </Button>
+
               </Box>
             ))}
           </Box>
